@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  best-movies-web:
+    build: best-movies-web
+    ports:
+      - 5500:80
+    depends_on:
+      - best-movies-api
+  
+  best-movies-api:
+    build: 
+      context: ./BestMovies.Net
+      dockerfile: ./BestMovies.Api/Dockerfile
+    ports:
+      - 4500:80
+      - 4501:423
+    environment:
+      - ASPNETCORE_ENV=Development
