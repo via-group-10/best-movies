@@ -5,6 +5,7 @@ services:
     build:
       context: ./best-movies-web
       dockerfile: Dockerfile
+    image: antonjanto/best-movies-web
     ports:
       - 80:80
     depends_on:
@@ -14,6 +15,7 @@ services:
     build: 
       context: ./BestMovies.Net
       dockerfile: ./BestMovies.Api/Dockerfile
+    image: antonjanto/best-movies-api
     ports:
       - 4500:80
     environment:

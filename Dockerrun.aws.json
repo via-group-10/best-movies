@@ -1,0 +1,37 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+        "name": "best-movies-web",
+        "image": "antonjanto/best-movies-web",
+        "hostname": "web",
+        "essential": true,
+        "portMappings": [
+            {
+                "hostPort": 80,
+                "containerPort": 80
+            }
+        ],
+        "links": [
+            "best-movies-api"
+        ],
+        "memory": 150
+    },
+    {
+        "name": "best-movies-api",
+        "image": "antonjanto/best-movies-api",
+        "hostname": "api",
+        "essential": true,
+        "portMappings":[
+            {
+                "hostPort": 3000,
+                "containerPort": 80
+            }
+        ],
+        "memory": 150
+    }
+  ],
+  "volumes": [
+
+  ]
+}
