@@ -1,4 +1,5 @@
 FROM node:16.4.2 AS build
+LABEL name=best-movies-web
 
 WORKDIR /app
 
