@@ -1,0 +1,23 @@
+name: Dockerize BestMovies Inc.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-container:
+    name: Build Docker container image
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker-Compose Publish
+    # You may pin to the exact commit or the version.
+    # uses: pennsignals/publish_docker-compose@da09b48fff3a4c34dd78fe112cbb5c001e2a9582
+      uses: pennsignals/publish_docker-compose@v0.1.1
+      with:
+        # docker-compose file to build and publish images from
+        docker_compose: docker-compose.yml
+        repo_token: "${{ secrets.DOCKER_HUB_TOKEN }}"
