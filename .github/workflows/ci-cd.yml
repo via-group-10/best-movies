@@ -34,4 +34,4 @@ jobs:
         region: us-east-1
         application_name: BestMovies-SEP6
         environment_name: best-movies-env
-        version_label: 1.0.0
+        version_label: bestmovies-1.0.0
