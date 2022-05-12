@@ -13,11 +13,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Docker-Compose Publish
-    # You may pin to the exact commit or the version.
-    # uses: pennsignals/publish_docker-compose@da09b48fff3a4c34dd78fe112cbb5c001e2a9582
-      uses: pennsignals/publish_docker-compose@v0.1.1
-      with:
-        # docker-compose file to build and publish images from
-        docker_compose: docker-compose.yml
-        repo_token: "${{ secrets.DOCKER_HUB_TOKEN }}"
+    
+    - name: Docker-Hub Login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
+        DOCKER_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+      run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+        
+    - name: Docker Compose Build
+      run: docker-compose build
+        
+    - name: Docker Compose push to Docker Hub
+      run: docker-compose push
