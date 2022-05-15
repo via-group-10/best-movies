@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: antonjanto/best-movies-web
     ports:
-      - 80:80
+      - 8080:80
     depends_on:
       - best-movies-api
   
@@ -17,6 +17,7 @@ services:
       dockerfile: ./BestMovies.Api/Dockerfile
     image: antonjanto/best-movies-api
     ports:
-      - 4500:80
+      - 5000:5000
     environment:
       - ASPNETCORE_ENV=Development
+      - ASPNETCORE_URLS=http://+:5000

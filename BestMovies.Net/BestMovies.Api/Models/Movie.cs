@@ -2,6 +2,7 @@
 
 public class Movie
 {
-    public string Name { get; set; } = "Meno filmu";
-    public string? Description { get; set; }
+    public long Id { get; set; }
+    public string Title { get; set; } = null!;
+    public short? Year { get; set; }
 }
