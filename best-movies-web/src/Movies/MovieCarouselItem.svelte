@@ -1,15 +1,18 @@
 <script>
     export let movie;
+    export let movie_index;
 
-    const colors = ['black', 'white', 'blue', 'lightblue', 'gree', 'grey']
+    const colors = ['black', 'white', 'blue', 'lightblue', 'green', 'grey']
 
     function bg_color() {
-        const c = movie.id % 6;
+        const c = movie_index % 6;
         return colors[c];
     }
+
+    let color = bg_color();
 </script>
 
-<article class="movie">
+<article class="movie" style="--color: {color}">
     {#if movie }
     <h5> { movie.title } </h5>
     {/if}
@@ -18,15 +21,17 @@
 <style>
     .movie {
         width: 25%;
-        background-color: bg_color();
+        height: 10rem;
+        background-color: var(--color);
         position: relative;
     }
 
     .movie h5 {
         position: absolute;
-        bottom: 2rem;
-        left: 1rem;
-        right: 1rem;
+        top: 15%;
+        bottom: 15%;
+        left: 10%;
+        right: 10%;
     }
 
 </style>
