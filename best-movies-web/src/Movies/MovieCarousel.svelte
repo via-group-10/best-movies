@@ -7,9 +7,11 @@
     export let animation_speed = 500;
     let movies = [];
     let movie_item = [];
+    const url = "BestMoviesApiUrl"
+    const endpoint = "/movies?limit=15"
 
     onMount(async () => {
-        const res = await fetch('http://localhost:5252/api/movies?limit=15')
+        const res = await fetch(url + endpoint)
         movies = await res.json();
     })
 

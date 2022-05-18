@@ -31,7 +31,7 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        region: us-east-1
+        region: eu-central-1
         application_name: BestMovies-SEP6
-        environment_name: best-movies-env
-        version_label: bestmovies-1.0.0
+        environment_name: Bestmoviessep6-env
+        version_label: 1.0.0
