@@ -21,7 +21,7 @@ public class MovieRepository : RepositoryBase, IMovieRepository
 
         if (filter.Title is not null)
         {
-            query = query.Where(m => m.Title.Contains(filter.Title));
+            query = query.Where(m => m.Title.Contains(filter.Title, StringComparison.InvariantCultureIgnoreCase));
         }
 
         return await query.Sort(filter).ToListAsync();
