@@ -17,6 +17,13 @@ public class MovieRepository : RepositoryBase, IMovieRepository
 
     public async Task<List<Movie>> GetMoviesAsync(MovieFilter filter)
     {
-        return await Context.Movies.Sort(filter).ToListAsync();
+        var query = Context.Movies.AsQueryable();
+
+        if (filter.Title is not null)
+        {
+            query = query.Where(m => m.Title.Contains(filter.Title));
+        }
+
+        return await query.Sort(filter).ToListAsync();
     }
 }

@@ -2,5 +2,5 @@
 
 public class MovieFilter : FilterBase
 {
-
+    public string? Title { get; set; }
 }
