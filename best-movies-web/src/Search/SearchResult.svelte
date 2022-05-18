@@ -4,9 +4,12 @@
     export let params = {};
     let filter = params.filter;
     let movies;
-//TODO change URL  
+
+    const url = "BestMoviesApiUrl";
+    const endpoint = `/movies?title=${filter}`;
+
     onMount(async () => {
-        const res = await fetch(`http://localhost:5252/api/movies?title=${filter}`)
+        const res = await fetch(url + endpoint);
         movies = await res.json();
     })
 
@@ -14,8 +17,15 @@
 
 <h1>Passed filter : {params.filter}</h1>
 
-{#each movies as movie, i (movie.id)}
-<div class="item-container" id = {movie.id}>
-    <MovieCarouselItem movie = {movie} movie_index = {i} bind:this={movie_item[i]}/>
-</div>
-{/each}
+{#if movies}
+
+    {#each movies as movie, i (movie.id)}
+    <div class="item-container" id = {movie.id}>
+        <h1>{movie.title}</h1>
+    </div>
+    {/each}
+
+{:else}
+<h1>waiting...</h1>
+
+{/if}
