@@ -7,14 +7,13 @@
     export let animation_speed = 500;
     let movies = [];
     let movie_item = [];
-    const url = "BestMoviesApiUrl"
-    const endpoint = "/movies?limit=15"
+    const url = "BestMoviesApiUrl";
+    const endpoint = "/movies?limit=15";
 
     onMount(async () => {
-        const res = await fetch(url + endpoint, {
-            mode: "no-cors"
-        })
-        movies = await res.json();
+        let res = await fetch(url + endpoint);
+        if (res.ok)
+            movies = await res.json();
     })
 
     const onRotateLeft = e => {
@@ -138,10 +137,6 @@
         height: inherit;
         background-color: rgba(0,0,0, 0.2);
     } */
-
-    h2 {
-        padding-left: 1rem;
-    }
 
 
     @media only screen and (max-width: 600px){

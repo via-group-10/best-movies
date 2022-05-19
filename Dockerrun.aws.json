@@ -12,9 +12,6 @@
                 "containerPort": 80
             }
         ],
-        "links": [
-            "best-movies-api"
-        ],
         "memory": 150
     },
     {

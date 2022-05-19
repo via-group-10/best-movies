@@ -17,7 +17,9 @@ services:
     image: antonjanto/best-movies-web
     container_name: best-movies-web
     ports:
-      - 8080:80
+      - 80:80
+    links:
+      - "best-movies-api:api"
     #depends_on:
     #  - best-movies-proxy
   
@@ -28,6 +30,6 @@ services:
     image: antonjanto/best-movies-api
     container_name: best-movies-api
     ports:
-      - 5000:5000
+      - 5000:80
     #depends_on:
     #  - best-movies-proxy
