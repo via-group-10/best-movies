@@ -11,7 +11,9 @@
     const endpoint = "/movies?limit=15"
 
     onMount(async () => {
-        const res = await fetch(url + endpoint)
+        const res = await fetch(url + endpoint, {
+            mode: "no-cors"
+        })
         movies = await res.json();
     })
 
