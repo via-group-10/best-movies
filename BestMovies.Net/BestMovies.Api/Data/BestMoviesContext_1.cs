@@ -22,11 +22,7 @@ namespace BestMovies.Api.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlite("Filename=movies.db");
-            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,9 +33,11 @@ namespace BestMovies.Api.Data
 
                 entity.ToTable("directors");
 
-                entity.Property(e => e.MovieId).HasColumnName("movie_id");
+                entity.Property(e => e.MovieId)
+                    .HasColumnName("movie_id");
 
-                entity.Property(e => e.PersonId).HasColumnName("person_id");
+                entity.Property(e => e.PersonId)
+                    .HasColumnName("person_id");
 
                 entity.HasOne(d => d.Movie)
                     .WithMany()
@@ -57,14 +55,15 @@ namespace BestMovies.Api.Data
                 entity.ToTable("movies");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
-                entity.Property(e => e.Title).HasColumnName("title");
+                entity.Property(e => e.Title)
+                    .HasColumnName("title");
 
                 entity.Property(e => e.Year)
-                    .HasColumnType("NUMERIC")
                     .HasColumnName("year");
+
+                entity.HasKey(e => e.Id);
             });
 
             modelBuilder.Entity<Person>(entity =>
@@ -72,14 +71,15 @@ namespace BestMovies.Api.Data
                 entity.ToTable("people");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Birth)
-                    .HasColumnType("NUMERIC")
                     .HasColumnName("birth");
 
-                entity.Property(e => e.Name).HasColumnName("name");
+                entity.Property(e => e.Name)
+                    .HasColumnName("name");
+
+                entity.HasKey(e => e.Id);
             });
 
             modelBuilder.Entity<Rating>(entity =>
@@ -88,11 +88,14 @@ namespace BestMovies.Api.Data
 
                 entity.ToTable("ratings");
 
-                entity.Property(e => e.MovieId).HasColumnName("movie_id");
+                entity.Property(e => e.MovieId)
+                    .HasColumnName("movie_id");
 
-                entity.Property(e => e.Value).HasColumnName("rating");
+                entity.Property(e => e.Value)
+                    .HasColumnName("rating");
 
-                entity.Property(e => e.Votes).HasColumnName("votes");
+                entity.Property(e => e.Votes)
+                    .HasColumnName("votes");
 
                 entity.HasOne(d => d.Movie)
                     .WithMany()
@@ -106,9 +109,11 @@ namespace BestMovies.Api.Data
 
                 entity.ToTable("stars");
 
-                entity.Property(e => e.MovieId).HasColumnName("movie_id");
+                entity.Property(e => e.MovieId)
+                    .HasColumnName("movie_id");
 
-                entity.Property(e => e.PersonId).HasColumnName("person_id");
+                entity.Property(e => e.PersonId)
+                    .HasColumnName("person_id");
 
                 entity.HasOne(d => d.Movie)
                     .WithMany()

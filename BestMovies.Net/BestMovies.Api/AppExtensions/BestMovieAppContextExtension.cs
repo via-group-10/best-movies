@@ -7,11 +7,11 @@ namespace BestMovies.Api.AppExtensions;
 
 public static class BestMovieAppContextExtension
 {
-    public static IServiceCollection AddBestMoviesAppContext(this IServiceCollection services)
+    public static IServiceCollection AddBestMoviesAppContext(this IServiceCollection services, IConfiguration configuration)
     {
         return services
             .AddDbContext<BestMoviesContext>(options =>
-                options.UseSqlite("Data Source=movies.db"))
+                options.UseSqlServer(configuration.GetConnectionString("MoviesDatabase")))
             .AddTransient<IMovieRepository, MovieRepository>();
     }
 }

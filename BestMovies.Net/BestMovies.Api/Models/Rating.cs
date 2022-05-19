@@ -2,9 +2,9 @@
 
 public class Rating
 {
-    public long MovieId { get; set; }
+    public int MovieId { get; set; }
     public double Value { get; set; }
-    public long Votes { get; set; }
+    public int Votes { get; set; }
 
     public virtual Movie Movie { get; set; } = null!;
 }
