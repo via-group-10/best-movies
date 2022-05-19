@@ -27,6 +27,9 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader());
 
+
+app.Urls.Add("http://+:5000");
+
 app.UseAuthorization();
 
 app.MapControllers();

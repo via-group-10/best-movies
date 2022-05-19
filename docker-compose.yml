@@ -1,22 +1,33 @@
 version: '3.9'
 
 services:
+  #best-movies-proxy:
+  #  build:
+  #    context: ./best-movies-proxy
+  #    dockerfile: Dockerfile
+  #  image: antonjanto/best-movies-proxy
+  #  container_name: best-movies-proxy
+  #  ports:
+  #    - 80:80
+
   best-movies-web:
     build:
       context: ./best-movies-web
       dockerfile: Dockerfile
     image: antonjanto/best-movies-web
+    container_name: best-movies-web
     ports:
       - 8080:80
-    depends_on:
-      - best-movies-api
+    #depends_on:
+    #  - best-movies-proxy
   
   best-movies-api:
     build: 
       context: ./BestMovies.Net
       dockerfile: ./BestMovies.Api/Dockerfile
     image: antonjanto/best-movies-api
+    container_name: best-movies-api
     ports:
       - 5000:5000
-    environment:
-      - ASPNETCORE_URLS=http://+:5000
+    #depends_on:
+    #  - best-movies-proxy

@@ -4,7 +4,7 @@
     {
         "name": "best-movies-web",
         "image": "antonjanto/best-movies-web",
-        "hostname": "web",
+        "hostname": "best-movies-web",
         "essential": true,
         "portMappings": [
             {
@@ -20,12 +20,12 @@
     {
         "name": "best-movies-api",
         "image": "antonjanto/best-movies-api",
-        "hostname": "api",
+        "hostname": "best-movies-api",
         "essential": true,
         "portMappings":[
             {
                 "hostPort": 5000,
-                "containerPort": 5000
+                "containerPort": 80
             }
         ],
         "memory": 150

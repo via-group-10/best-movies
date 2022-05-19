@@ -16,7 +16,7 @@ public class MoviesController : ControllerBase
         IHttpContextAccessor httpContextAccessor,
         IMovieRepository movieRepository)
     {
-        userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        // userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         this.movieRepository = movieRepository;
     }
 
