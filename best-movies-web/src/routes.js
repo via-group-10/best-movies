@@ -5,7 +5,7 @@ import SearchResult from './Search/SearchResult.svelte'
 
 export default {
     "/": Home,
-    "/movie": MovieDetail,
+    "/movie/:id": MovieDetail,
     "/search/:filter": SearchResult,
     // If route not recognized:
     "*": NotFound
