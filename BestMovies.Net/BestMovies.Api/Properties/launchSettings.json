@@ -12,17 +12,17 @@
     "BestMovies.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "api/movies",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5252",
+      "applicationUrl": "http://localhost:5000",
       "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "api/movies",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
