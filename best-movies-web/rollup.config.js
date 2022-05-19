@@ -72,7 +72,7 @@ export default {
 		production && terser(),
 
 		replace({
-			'BestMoviesApiUrl': production ? 'http://best-movies-api:5000/api' : 'http://localhost:5000/api'
+			'BestMoviesApiUrl': production ? 'http://best-movies-api:80/api' : 'http://localhost:5000/api'
 		})
 	],
 	watch: {
