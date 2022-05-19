@@ -19,9 +19,9 @@ public class MoviesController : ControllerBase
         // userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         this.movieRepository = movieRepository;
     }
-
-    [HttpGet(Name = "GetMovies")]
-    public async Task<ActionResult<IEnumerable<Movie>>> Get([FromQuery] MovieFilter? filter)
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Movie>>> GetList([FromQuery] MovieFilter? filter)
     {
         if (filter == null)
         {
@@ -29,5 +29,13 @@ public class MoviesController : ControllerBase
         }
         var result = await movieRepository.GetMoviesAsync(filter);
         return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Movie>> Get(int id)
+    {
+        var result = await movieRepository.GetMovieByIdAsync(id);
+
+        return result != null ? Ok(result) : NotFound(new { message = $"Movie with the id {id} was not found." });
     }
 }

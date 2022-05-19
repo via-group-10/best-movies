@@ -5,5 +5,6 @@ namespace BestMovies.Api.Repository.Abstractions;
 
 public interface IMovieRepository
 {
-    public Task<List<Movie>> GetMoviesAsync(MovieFilter filter);
+    Task<List<Movie>> GetMoviesAsync(MovieFilter filter);
+    Task<Movie?> GetMovieByIdAsync(int id);
 }

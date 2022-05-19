@@ -29,7 +29,7 @@ namespace BestMovies.Api.Data
         {
             modelBuilder.Entity<Director>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(d => d.Id);
 
                 entity.ToTable("directors");
 
@@ -39,57 +39,64 @@ namespace BestMovies.Api.Data
                 entity.Property(e => e.PersonId)
                     .HasColumnName("person_id");
 
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
                 entity.HasOne(d => d.Movie)
-                    .WithMany()
+                    .WithMany(m => m.Directors)
                     .HasForeignKey(d => d.MovieId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.Person)
                     .WithMany()
                     .HasForeignKey(d => d.PersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Movie>(entity =>
             {
+                entity.HasKey(e => e.Id);
+
                 entity.ToTable("movies");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Title)
                     .HasColumnName("title");
 
                 entity.Property(e => e.Year)
                     .HasColumnName("year");
-
-                entity.HasKey(e => e.Id);
             });
 
             modelBuilder.Entity<Person>(entity =>
             {
+                entity.HasKey(e => e.Id);
+
                 entity.ToTable("people");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Birth)
                     .HasColumnName("birth");
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name");
-
-                entity.HasKey(e => e.Id);
             });
 
             modelBuilder.Entity<Rating>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(d => d.MovieId);
 
                 entity.ToTable("ratings");
 
                 entity.Property(e => e.MovieId)
-                    .HasColumnName("movie_id");
+                    .HasColumnName("movie_id")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Value)
                     .HasColumnName("rating");
@@ -98,14 +105,14 @@ namespace BestMovies.Api.Data
                     .HasColumnName("votes");
 
                 entity.HasOne(d => d.Movie)
-                    .WithMany()
+                    .WithMany(m => m.Ratings)
                     .HasForeignKey(d => d.MovieId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Star>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(d => d.Id);
 
                 entity.ToTable("stars");
 
@@ -115,15 +122,19 @@ namespace BestMovies.Api.Data
                 entity.Property(e => e.PersonId)
                     .HasColumnName("person_id");
 
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
                 entity.HasOne(d => d.Movie)
-                    .WithMany()
+                    .WithMany(m => m.Stars)
                     .HasForeignKey(d => d.MovieId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.Person)
                     .WithMany()
                     .HasForeignKey(d => d.PersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             OnModelCreatingPartial(modelBuilder);
