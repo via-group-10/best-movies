@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import SearchItem from "./SearchItem.svelte";
 
     export let params = {};
     let filter = params.filter;
@@ -15,17 +16,32 @@
 
 </script>
 
-<h1>Passed filter : {params.filter}</h1>
+<div class="container">
 
-{#if movies}
+    {#if movies}
 
-    {#each movies as movie, i (movie.id)}
-    <div class="item-container" id = {movie.id}>
-        <h1>{movie.title}</h1>
-    </div>
-    {/each}
+        {#each movies as movie, i (movie.id)}
+            <SearchItem movie={movie}></SearchItem>
+        {/each}
 
-{:else}
-<h1>waiting...</h1>
+        {:else}
+        <h1>waiting...</h1>
 
-{/if}
+    {/if}
+
+</div>
+
+
+
+
+<style>
+
+    .container{
+        display:grid;
+    }
+
+
+
+    
+
+</style>

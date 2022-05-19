@@ -12,7 +12,7 @@
 	function swoop(side){
 		let start = side === 'left' ? -70 : 70 
 		return {
-			duration: 2000,
+			duration: 2500,
 			easing: sineIn,
 			css: (t) => `transform: translateX(${start + t * -start}%); opacity: ${t};`
 		}
