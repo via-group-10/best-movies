@@ -3,8 +3,6 @@ name: Dockerize BestMovies Inc.
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build-container:
@@ -34,4 +32,4 @@ jobs:
         region: eu-central-1
         application_name: BestMovies-SEP6
         environment_name: Bestmoviessep6-env
-        version_label: 1.0.0
+        version_label: 1.0.4
