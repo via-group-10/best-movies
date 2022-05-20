@@ -7,5 +7,5 @@ public class Movie
     public int? Year { get; set; }
     public List<Director> Directors { get; set; } = new List<Director>();
     public List<Star> Stars { get; set; } = new List<Star>();
-    public List<Rating> Ratings { get; set; } = new List<Rating>();
+    public Rating Rating { get; set; }
 }

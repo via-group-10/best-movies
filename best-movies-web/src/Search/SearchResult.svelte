@@ -16,7 +16,7 @@
 
 </script>
 
-<div class="container">
+<div class="container pb-4">
 
     {#if movies}
 
@@ -37,7 +37,7 @@
 <style>
 
     .container{
-        display:grid;
+        
     }
 
 

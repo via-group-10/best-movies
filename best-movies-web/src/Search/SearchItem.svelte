@@ -21,19 +21,34 @@
     }
 </script>
 
-<div class="row" style="margin-bottom:2rem">
-    <div class="col-md-4 movie-picture" on:click={() => push(`/movie/${movie.id}`)}>
+<div class="row mt-5">
+    <div class="col-12 col-lg-5" on:click={() => push(`/movie/${movie.id}`)}>
         <!--TODO ADD movie picture-->
+        <div class="movie-picture" />
     </div>
-    <div class="col-md-8">
+    <div class="col-12 col-lg-7">
         <div class="row">
-            <div class="col-auto movie-title" on:click={() => push(`/movie/${movie.id}`)}>{movie.title}</div>
+            <div class="col-auto" on:click={() => push(`/movie/${movie.id}`)}>
+                <h2 class="movie-title">{ movie.title }</h2>
+            </div>
 
-            <div class="col-lg" style="font-size:1.2rem; padding-top:0.8rem">Ratings</div>
+            <div class="col-lg" style="padding-top:0.8rem">
+                Rating: 
+                {#if movie.rating}
+                    { movie.rating.value } <small>({ movie.rating.votes } votes)</small>
+                {:else}
+                    <small>unavailable</small>
+                {/if}
+            </div>
         </div>
         <div class="row">
             <div class="col-md movie-stars">
-                Starring: <!--TODO ADD stars-->
+                <strong>Starring:</strong>
+                {#if movie.stars}
+                    {#each movie.stars as star}
+                        { star.person.name }{ movie.stars[movie.stars.length-1].id === star.id ? '' : ', ' }
+                    {/each}
+                {/if}
             </div>
         </div>
         <div class="row">
@@ -62,26 +77,21 @@
 
 <style>
     .movie-picture {
+        display: block;
         background-color: blanchedalmond;
         aspect-ratio: 16/9;
-        max-width: 400px;
-        max-height: 225px;
-    }
-
-    .movie-title {
-        font-size: 2rem;
     }
 
     .movie-title:hover{
         color: blue;
         cursor: pointer;
-        transition: color 400ms ease ;
+        transition: color 200ms linear;
     }
 
     .movie-picture:hover{
         opacity: 0.6;
         cursor: pointer;
-        transition: opacity 400ms ease;
+        transition: opacity 300ms ease-out;
     }
 
     .collapse-prompt:hover{
@@ -94,11 +104,5 @@
 
     .collapse-prompt:hover {
         text-decoration: underline;
-    }
-
-    @media only screen and (max-width: 768px) {
-        .movie-picture {
-            max-width: 100%;
-        }
     }
 </style>

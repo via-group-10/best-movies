@@ -13,7 +13,7 @@ public class MovieRepository : RepositoryBase<Movie>, IMovieRepository
     public MovieRepository(BestMoviesContext context) : base(context)
     {
         baseQuery = baseQuery
-            .Include(_ => _.Ratings)
+            .Include(_ => _.Rating)
             .Include(_ => _.Stars).ThenInclude(_ => _.Person)
             .Include(_ => _.Directors).ThenInclude(_ => _.Person);
     }

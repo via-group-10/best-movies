@@ -105,8 +105,7 @@ namespace BestMovies.Api.Data
                     .HasColumnName("votes");
 
                 entity.HasOne(d => d.Movie)
-                    .WithMany(m => m.Ratings)
-                    .HasForeignKey(d => d.MovieId)
+                    .WithOne(m => m.Rating)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
