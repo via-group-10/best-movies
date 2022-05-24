@@ -1,19 +1,20 @@
 using BestMovies.Api.AppExtensions;
+using BestMovies.Api.Middleware;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddBestMoviesAppContext(builder.Configuration);
+builder.Services.AddBestMoviesApiContext(builder.Configuration);
 
 builder.Services.AddControllers()
-    .AddJsonOptions(options => options
-        .JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
@@ -30,6 +31,9 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader());
 
+app.UseMiddleware<JwtAuthMiddleware>();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
