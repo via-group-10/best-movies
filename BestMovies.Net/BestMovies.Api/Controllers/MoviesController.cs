@@ -1,6 +1,8 @@
-﻿using BestMovies.Api.Models;
+﻿using BestMovies.Api.Middleware;
+using BestMovies.Api.Models;
 using BestMovies.Api.Models.Filters;
 using BestMovies.Api.Repository.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,18 +10,18 @@ namespace BestMovies.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MoviesController : ControllerBase
+[Authorize]
+public class MoviesController : BestMoviesControllerBase
 {
-    private readonly string? userId;
     private readonly IMovieRepository movieRepository;
-    public MoviesController(
-        IHttpContextAccessor httpContextAccessor,
-        IMovieRepository movieRepository)
+
+
+    public MoviesController(IMovieRepository movieRepository)
     {
-        // userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         this.movieRepository = movieRepository;
     }
     
+    // GET api/movies
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Movie>>> GetList([FromQuery] MovieFilter? filter)
     {
@@ -31,7 +33,9 @@ public class MoviesController : ControllerBase
         return Ok(result);
     }
 
+    //GET api/movies/{id}
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<Movie>> Get(int id)
     {
         var result = await movieRepository.GetMovieByIdAsync(id);
