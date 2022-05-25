@@ -13,7 +13,9 @@
   const endpoint = `/movies/${id}`;
 
   onMount(async () => {
-    const res = await fetch(url + endpoint);
+    const res = await fetch(url + endpoint, {
+            headers: {'Authentication': window.localStorage.getItem('authToken')},
+        });
     movie = await res.json();
     console.log(movie);
   });

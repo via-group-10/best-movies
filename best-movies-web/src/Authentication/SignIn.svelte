@@ -27,7 +27,6 @@
         });
         response = await res.json();
         window.localStorage.setItem('authToken', response.authToken);
-        console.log(response.authToken)
     }
 </script>
 

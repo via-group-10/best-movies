@@ -11,7 +11,9 @@
     const endpoint = `/movies?title=${filter}`;
 
     onMount(async () => {
-        const res = await fetch(url + endpoint);
+        const res = await fetch(url + endpoint, {
+            headers: {'Authentication': window.localStorage.getItem('authToken')},
+        });
         movies = await res.json();
     })
 
@@ -39,13 +41,5 @@
 
 
 <style>
-
-    .container{
-        
-    }
-
-
-
-    
 
 </style>
