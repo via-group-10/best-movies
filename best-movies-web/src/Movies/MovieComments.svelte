@@ -1,38 +1,29 @@
 <script>
-    export let movie;
-    let comments;
+  import Comment from "../Misc/Comment.svelte";
 
-    onMount(async () => {
-            const res = await fetch(url + endpoint);
-            comments = await res.json();
-        })
+  export let comments = [
+    {
+      username: "antonjanto",
+      created: "25.5.2022",
+      text: "random lorem ipsum shit",
+    },
+    {
+      username: "antonjanto",
+      created: "25.5.2022",
+      text: "random lorem ipsum shit",
+    },
+  ];
 </script>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-2">
-            <div class="movie-picture"></div>
-        </div>
-        <div class="col-md-10">
-            <row>
-                <div class="col-md-12">
-                  <h4>Title</h4>
-                </div>
-            </row>
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>User Comments</h3>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="text-dark">
+  {#if comments}
+    <h4 class="mb-0">Recent comments</h4>
+    <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
+    {#each comments as comment}
+      <Comment {comment} />
+      <hr class="my-0" />
+    {/each}
+  {:else}
+    <h4 class="mb-0">No recent comments</h4>
+  {/if}
 </div>
-
-<style>
-    .movie-picture {
-            display: block;
-            background-color: blanchedalmond;
-            aspect-ratio: 16/9;
-        }
-</style>

@@ -72,7 +72,8 @@ export default {
 		production && terser(),
 
 		replace({
-			'BestMoviesApiUrl': production ? 'http://bestmoviessep6-env.eba-ba7eynj6.eu-central-1.elasticbeanstalk.com:5000/api' : 'http://localhost:5000/api'
+			'BestMoviesApiUrl': production ? 'http://bestmoviessep6-env.eba-ba7eynj6.eu-central-1.elasticbeanstalk.com:5000/api' : 'http://localhost:5000/api',
+			preventAssignment: true
 		})
 	],
 	watch: {

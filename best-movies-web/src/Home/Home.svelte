@@ -27,7 +27,7 @@
 </section>
 
 <div class="search-container">
-	<Search on:submit={() => push(`/search/${filter}`)} bind:value={filter}/>
+	<Search on:submit={() => push(`/search/${filter}`)} bind:value={filter} label={''}/>
 </div>
 
 

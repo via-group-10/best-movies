@@ -10,7 +10,6 @@ export default {
     "/": Home,
     "/movie/:id": MovieDetail,
     "/search/:filter": SearchResult,
-    "/movie/comments/:movie_id": MovieComments,
     "/signup/": SignUp,
     "/signin/": SignIn,
     // If route not recognized:
