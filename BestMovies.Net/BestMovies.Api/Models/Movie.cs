@@ -8,4 +8,6 @@ public class Movie
     public List<Director> Directors { get; set; } = new List<Director>();
     public List<Star> Stars { get; set; } = new List<Star>();
     public Rating Rating { get; set; }
+
+    public List<UserFavoriteMovie> FavoredByUsers { get; set; } = new List<UserFavoriteMovie>();
 }

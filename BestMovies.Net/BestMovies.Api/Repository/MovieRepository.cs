@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BestMovies.Api.Repository;
 
-public class MovieRepository : RepositoryBase<Movie>, IMovieRepository
+public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
 {
 
     public MovieRepository(BestMoviesContext context) : base(context)
@@ -15,7 +15,8 @@ public class MovieRepository : RepositoryBase<Movie>, IMovieRepository
         baseQuery = baseQuery
             .Include(_ => _.Rating)
             .Include(_ => _.Stars).ThenInclude(_ => _.Person)
-            .Include(_ => _.Directors).ThenInclude(_ => _.Person);
+            .Include(_ => _.Directors).ThenInclude(_ => _.Person)
+            .Include(_ => _.FavoredByUsers);
     }
 
     public async Task<Movie?> GetMovieByIdAsync(int id)

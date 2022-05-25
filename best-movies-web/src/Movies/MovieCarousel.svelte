@@ -11,7 +11,10 @@
     const endpoint = "/movies?limit=15";
 
     onMount(async () => {
-        let res = await fetch(url + endpoint);
+        let res = await fetch(url + endpoint, 
+        {
+            headers: {'Authentication': window.localStorage.getItem('authToken')}
+        });
         if (res.ok)
             movies = await res.json();
     })
