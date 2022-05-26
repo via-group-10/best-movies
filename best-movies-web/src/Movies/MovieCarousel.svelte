@@ -2,19 +2,15 @@
     import { onMount } from "svelte";
     import { flip } from "svelte/animate"
     import MovieCarouselItem from "./MovieCarouselItem.svelte";
+    import { getMovies } from "../api";
 
     export let title = '';
     export let animation_speed = 500;
     let movies = [];
     let movie_item = [];
-    const url = "BestMoviesApiUrl";
-    const endpoint = "/movies?limit=15";
 
     onMount(async () => {
-        let res = await fetch(url + endpoint, 
-        {
-            headers: {'Authentication': window.localStorage.getItem('authToken')}
-        });
+        let res = await getMovies();
         if (res.ok)
             movies = await res.json();
     })

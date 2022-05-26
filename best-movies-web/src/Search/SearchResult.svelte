@@ -2,19 +2,18 @@
     import { onMount } from "svelte";
     import SearchItem from "./SearchItem.svelte";
     import { Circle2 } from 'svelte-loading-spinners';
+    import { getMovies } from "../api";
 
     export let params = {};
     let filter = params.filter;
     let movies;
 
-    const url = "BestMoviesApiUrl";
-    const endpoint = `/movies?title=${filter}`;
-
     onMount(async () => {
-        const res = await fetch(url + endpoint, {
-            headers: {'Authentication': window.localStorage.getItem('authToken')},
+        const res = await getMovies({
+            title: filter
         });
-        movies = await res.json();
+        if (res.ok)
+            movies = await res.json();
     })
 
 </script>

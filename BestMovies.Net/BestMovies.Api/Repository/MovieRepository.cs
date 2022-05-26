@@ -16,7 +16,8 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
             .Include(_ => _.Rating)
             .Include(_ => _.Stars).ThenInclude(_ => _.Person)
             .Include(_ => _.Directors).ThenInclude(_ => _.Person)
-            .Include(_ => _.FavoredByUsers);
+            .Include(_ => _.FavoredByUsers)
+            .Include(_ => _.Comments);
     }
 
     public async Task<Movie?> GetMovieByIdAsync(int id)
@@ -34,5 +35,25 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
         }
 
         return await query.Sort(filter).ToListAsync();
+    }
+
+    public async Task<bool> AddCommentToMovieAsync(int movieId, Comment comment)
+    {
+        Task<Movie?> movieTask = Context.Movies
+            .Include(m => m.Comments)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+
+        var movie = await movieTask;
+
+        if (movie == null)
+        {
+            return false;
+        }
+
+        movie.Comments.Add(comment);
+
+        int changes = await Context.SaveChangesAsync();
+
+        return changes > 0;
     }
 }

@@ -31,10 +31,12 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-app.UseMiddleware<JwtAuthMiddleware>();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.UseMiddleware<JwtAuthMiddleware>();
 
 app.MapControllers();
 

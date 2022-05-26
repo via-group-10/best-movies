@@ -15,7 +15,7 @@ namespace BestMovies.Api.Data
 
                 entity.ToTable("users");
 
-                entity.Property(e => e.Username)
+                entity.Property(e => e.Name)
                     .HasColumnName("login_name")
                     .IsRequired();
 
@@ -30,7 +30,6 @@ namespace BestMovies.Api.Data
                     .HasColumnName("id")
                     .UseIdentityColumn();
 
-                entity.Ignore(e => e.Name);
                 entity.Ignore(e => e.IsAuthenticated);
                 entity.Ignore(e => e.AuthenticationType);
                 entity.Ignore(e => e.AuthToken);
@@ -56,6 +55,28 @@ namespace BestMovies.Api.Data
 
                 entity.HasOne(e => e.Movie)
                     .WithMany(e => e.FavoredByUsers)
+                    .HasForeignKey(e => e.MovieId);
+            });
+
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("comments");
+
+                entity.Property(e => e.Username)
+                    .HasColumnName("username");
+
+                entity.Property(e => e.Text)
+                    .HasColumnName("text")
+                    .HasColumnType("TEXT");
+
+                entity.Property(e => e.Created)
+                    .HasColumnName("created")
+                    .HasDefaultValueSql("getdate()");
+
+                entity.HasOne<Movie>()
+                    .WithMany(e => e.Comments)
                     .HasForeignKey(e => e.MovieId);
             });
         }

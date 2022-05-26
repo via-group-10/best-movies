@@ -1,4 +1,4 @@
-﻿namespace BestMovies.Api.Models
+﻿namespace BestMovies.Api.Models.RequestDTO
 {
     public class UserDTO
     {

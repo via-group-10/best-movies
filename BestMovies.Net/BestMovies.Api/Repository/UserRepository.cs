@@ -14,20 +14,20 @@ namespace BestMovies.Api.Repository
 
         public async Task<BestMoviesUser?> FindUserMatchAsync(string username, string password)
         {
-            bool userExists = baseQuery.Any(u => u.Username == username);
+            bool userExists = baseQuery.Any(u => u.Name == username);
             if (!userExists)
             {
                 return null;
             }
             else 
             {
-                return await baseQuery.FirstOrDefaultAsync(u => u.Username == username && u.Pass == password);
+                return await baseQuery.FirstOrDefaultAsync(u => u.Name == username && u.Pass == password);
             }
         }
 
         public async Task<BestMoviesUser?> RegisterUserAsync(BestMoviesUser user)
         {
-            bool userExists = baseQuery.Any(u => u.Username == user.Username);
+            bool userExists = baseQuery.Any(u => u.Name == user.Name);
             if (userExists)
             {
                 return null;

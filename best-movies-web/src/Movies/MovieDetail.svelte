@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import Spinner from "../Misc/Spinner.svelte";
   import MovieComments from "./MovieComments.svelte";
+  import { getMovie } from "../api";
 
   export let movie;
   export let params;
@@ -9,15 +10,11 @@
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum";
 
   let id = params.id;
-  const url = "BestMoviesApiUrl";
-  const endpoint = `/movies/${id}`;
 
   onMount(async () => {
-    const res = await fetch(url + endpoint, {
-            headers: {'Authentication': window.localStorage.getItem('authToken')},
-        });
-    movie = await res.json();
-    console.log(movie);
+    const res = await getMovie(id)
+    if (res.ok)
+      movie = await res.json();
   });
 </script>
 
@@ -103,7 +100,7 @@
           <div class="col-12">
             <h5>
               <span style="font-weight: bold">
-                {#if movie.rating.votes}
+                {#if movie.rating}
                   ({movie.rating.votes} )
                 {/if}
               </span>

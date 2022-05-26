@@ -20,7 +20,8 @@ public static class BestMovieApiContextExtension
             .AddTransient<IMovieService, MovieService>()
             .AddTransient<IMovieRepository, MovieRepository>()
             .AddTransient<IUserRepository, UserRepository>()
-            .AddBestMoviesAuthentication(configuration);
+            .AddBestMoviesAuthentication(configuration)
+            .AddHttpContextAccessor();
     }
 
     public static IServiceCollection AddBestMoviesAuthentication(this IServiceCollection services, IConfiguration configuration)

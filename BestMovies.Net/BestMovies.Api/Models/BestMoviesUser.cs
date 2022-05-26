@@ -5,7 +5,6 @@ namespace BestMovies.Api.Models
     public class BestMoviesUser : IIdentity
     {
         public int Id { get; set; }
-        public string Username { get; set; } = string.Empty;
         public string Pass { get; set; } = string.Empty;
         public string AuthToken { get; set; } = string.Empty;
 
@@ -26,7 +25,7 @@ namespace BestMovies.Api.Models
 
         public bool IsAuthenticated => true;
 
-        public string Name => Username;
+        public string Name { get; set; } = string.Empty;
 
         public BestMoviesRole Rola { get; set; } = BestMoviesRole.User;
 

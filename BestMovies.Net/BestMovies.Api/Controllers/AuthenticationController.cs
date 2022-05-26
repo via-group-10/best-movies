@@ -1,5 +1,5 @@
-﻿using BestMovies.Api.Models;
-using BestMovies.Api.Models.Filters;
+﻿using BestMovies.Api.Models.Filters;
+using BestMovies.Api.Models.RequestDTO;
 using BestMovies.Api.Repository.Abstractions;
 using BestMovies.Api.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -12,11 +12,9 @@ namespace BestMovies.Api.Controllers;
 [Authorize]
 public class AuthenticationController : BestMoviesControllerBase
 {
-    private readonly AuthenticationService authService;
 
-    public AuthenticationController(AuthenticationService authService)
+    public AuthenticationController(AuthenticationService authService) : base(authService)
     {
-        this.authService = authService;
     }
 
     /// <summary>

@@ -1,5 +1,7 @@
-﻿using BestMovies.Api.Models;
+﻿using BestMovies.Api.AppExtensions;
+using BestMovies.Api.Models;
 using BestMovies.Api.Repository.Abstractions;
+using BestMovies.Api.Utils;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,22 +25,17 @@ namespace BestMovies.Api.Service
         {
             try
             {
-                var token = context.Request.Headers["Authentication"].FirstOrDefault()?.Split(" ").Last();
+                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
                 if (string.IsNullOrEmpty(token))
                     return null;
 
-                new JwtSecurityTokenHandler().ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtKey"))),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out var validatedToken);
+                new JwtSecurityTokenHandler()
+                    .ValidateToken(token, 
+                        new JwtTokenValidator.Parameters(configuration.GetJwtKey()), 
+                        out var validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
+                var jwtToken = validatedToken as JwtSecurityToken;
 
                 //context.SignInAsync(new ClaimsPrincipal(ClaimsToUser(jwtToken.Claims)));
                 // attach user to context on successful jwt validation
@@ -48,7 +45,7 @@ namespace BestMovies.Api.Service
                 // bmUser = apiManager.GetPouzivatelByEmail(bmUser.LoginName);
 
                 // context.User = new ClaimsPrincipal(bmUser);
-                context.User = new GenericPrincipal(bmUser, new[] { bmUser.Rola.ToString() });
+                context.User = new GenericPrincipal(new ClaimsIdentity(bmUser), new[] { bmUser.Rola.ToString() });
             }
             catch (Exception ex)
             {
@@ -60,7 +57,7 @@ namespace BestMovies.Api.Service
 
         public async Task<bool> SignupUser(string username, string password)
         {
-            BestMoviesUser? user = await userRepository.RegisterUserAsync(new BestMoviesUser() { Username = username, Pass = password });
+            BestMoviesUser? user = await userRepository.RegisterUserAsync(new BestMoviesUser() { Name = username, Pass = password });
 
             return user != null;
         }
@@ -80,7 +77,7 @@ namespace BestMovies.Api.Service
 
             if (password == user.Pass)
             {
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetValue<string>("JwtKey")));
+                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetJwtKey()));
 
                 //Authentication successful, Issue Token with user credentials 
                 //Generate Token for user 
@@ -90,7 +87,7 @@ namespace BestMovies.Api.Service
                     claims: UserToClaims(user),
                     notBefore: new DateTimeOffset(DateTime.Now).DateTime,
                     expires: new DateTimeOffset(
-                        DateTime.Now.AddMinutes(60)).DateTime,
+                        DateTime.Now.AddMinutes(120)).DateTime,
                     //Using HS256 Algorithm to encrypt Token  
                     signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
                 );
@@ -112,7 +109,7 @@ namespace BestMovies.Api.Service
         {
             IEnumerable<Claim> claims = new[]
             {
-            new(ClaimTypes.NameIdentifier, user.Username),
+            new(ClaimTypes.NameIdentifier, user.Name),
             new Claim(ClaimTypes.Role, user.Rola.ToString())
         };
 
@@ -125,7 +122,7 @@ namespace BestMovies.Api.Service
         {
             return new BestMoviesUser
             {
-                Username = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
+                Name = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
                 Rola = Enum.Parse<BestMoviesRole>(claims.First(c => c.Type == ClaimTypes.Role).Value)
             };
         }

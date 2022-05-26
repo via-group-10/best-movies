@@ -7,4 +7,5 @@ public interface IMovieRepository
 {
     Task<List<Movie>> GetMoviesAsync(MovieFilter filter);
     Task<Movie?> GetMovieByIdAsync(int id);
+    Task<bool> AddCommentToMovieAsync(int movieId, Comment comment);
 }
