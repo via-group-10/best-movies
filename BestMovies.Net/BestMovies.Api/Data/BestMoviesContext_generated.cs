@@ -67,8 +67,6 @@ namespace BestMovies.Api.Data
                 entity.Property(e => e.Title)
                     .HasColumnName("title");
 
-                entity.Property(e => e.Year)
-                    .HasColumnName("year");
             });
 
             modelBuilder.Entity<Person>(entity =>
