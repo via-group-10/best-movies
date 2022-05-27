@@ -4,8 +4,9 @@
   import MovieComments from "./MovieComments.svelte";
   import { getMovie } from "../api";
 
-  export let movie;
   export let params;
+  
+  let movie;
   let dummy_comment =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum";
 
@@ -14,8 +15,20 @@
   onMount(async () => {
     const res = await getMovie(id)
     if (res.ok)
-      movie = await res.json();
+    {
+      let response = await res.json();
+      movie = response;
+    }
   });
+
+  function handleMessage(event)
+  {
+    if (event.detail.event === 'reload') {
+      getMovie(id)
+      .then((r) => r.json())
+      .then(b => movie = b)
+    }
+  }
 </script>
 
 <div class="container-fluid container-lg pt-3">
@@ -128,7 +141,7 @@
     </div>
     <div class="row justify-content-center mt-2">
       <div class="col-md-10">
-          <MovieComments comments={movie.comments}></MovieComments>
+          <MovieComments on:message={handleMessage} movieId={movie.id} comments={movie.comments}></MovieComments>
       </div>
     </div>
   {:else}
