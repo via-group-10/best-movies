@@ -1,65 +1,39 @@
 <script>
+  import { push } from "svelte-spa-router";
+  import { Circle2 } from "svelte-loading-spinners";
+  import { signup } from "../api";
 
-    const url = "BestMoviesApiUrl";
-    const endpoint = `/Authentication/signup`;
-    import { push } from 'svelte-spa-router';
-    import Spinner from '../Misc/Spinner.svelte';
-    import { Circle2 } from 'svelte-loading-spinners'
-    
+  //Authentication
 
-    //Authentication
+  let username;
+  let password;
+  let showError = false;
+  let showSuccess = false;
 
-    let username;
-    let password;
-    let response;
-    let showError = false;
-    let showSuccess = false;
-
-    const user = {
-      Username: username,
-      Password: password
+  async function submit() {
+    let res = await signup(username, password);
+    let response = await res.json();
+    if (res.ok) {
+      successRedirect();
+    } 
+    else {
+      displayError();
     }
+  }
 
-    function User(username, password) {
-      const registeredUser = Object.create(user);
-      registeredUser.Username = username;
-      registeredUser.Password = password;
-      return registeredUser;
-    }
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
+  function displayError() {
+    showError = !showError;
+  }
 
-    async function submit() {
-        const res = await fetch(url + endpoint, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(User(username, password))
-        });
-        response = await res.json();
-        if(res.ok){
-          successRedirect();
-          
-        }
-        else{
-          displayError();
-        }}
-
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-    function displayError()
-    {
-      showError = !showError;
-    }
-
-    async function successRedirect()
-    {
-      showSuccess = !showSuccess;
-      await sleep(1000);
-      push(`/signin`);
-    }
-
-
+  async function successRedirect() {
+    showSuccess = !showSuccess;
+    await sleep(1500);
+    push(`/signin`);
+  }
 </script>
 
 {#if !showSuccess}
@@ -105,13 +79,14 @@
     </form>
   </main>
 {:else}
-<div class="vh-100 d-flex flex-column justify-content-center align-items-center">
+  <div
+    class="vh-100 d-flex flex-column justify-content-center align-items-center"
+  >
     <div class="success-box text-center mb-2">
       <p style="font-weight:bold;">Sign up successful!</p>
     </div>
     <Circle2 />
-</div>
-  
+  </div>
 {/if}
 
 <style>

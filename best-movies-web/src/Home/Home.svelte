@@ -3,7 +3,7 @@
 	import { sineIn } from 'svelte/easing';
 	import Search from 'svelte-search';
 	import { link, push } from 'svelte-spa-router';
-
+	
 	let filter;
 
 	const swoopRight = () => swoop('right');
@@ -19,7 +19,6 @@
 	}
 
 </script>
-
 
 <section class="welcome-section">
 		<h1 in:swoopLeft>Welcome to Best Movies &#x1F37F;</h1>

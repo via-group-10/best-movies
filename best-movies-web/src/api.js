@@ -35,3 +35,41 @@ export function getMovie(movieId) {
 
     return fetch(url + endpoint, request);
 }
+
+export function signin(name, password) {
+    if (name == undefined || password == undefined)
+        return Promise.reject("no user provided");
+
+    const url = "BestMoviesApiUrl";
+    const endpoint = "/Authentication/signin";
+
+    const request = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            "username": name,
+            "password": password
+        }),
+    }
+
+    return fetch(url + endpoint, request);
+}
+
+export function signup(name, password) {
+    if (name == undefined || password == undefined)
+        return Promise.reject("no user provided");
+
+    const url = "BestMoviesApiUrl";
+    const endpoint = "/Authentication/signup";
+
+    const request = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            "username": name,
+            "password": password
+        }),
+    }
+
+    return fetch(url + endpoint, request);
+}

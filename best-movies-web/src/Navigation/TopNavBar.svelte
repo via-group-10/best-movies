@@ -1,0 +1,50 @@
+<script lang="ts">
+  import { onDestroy } from "svelte";
+  import { push } from "svelte-spa-router";
+  import {
+    Collapse,
+    Navbar,
+    NavbarToggler,
+    Nav,
+    NavItem,
+    NavLink,
+    NavbarBrand,
+  } from "sveltestrap";
+  import { User } from "../store.js";
+
+  let user;
+  const unUser = User.subscribe((v) => (user = v));
+  onDestroy(unUser);
+
+  $: isSignedIn = !!user;
+
+  let isOpen = true;
+
+  function handleUpdate(event) {
+    isOpen = event.detail.isOpen;
+  }
+</script>
+
+<Navbar color="light" light expand="md">
+  <NavbarBrand href="/">&#x1F37F;</NavbarBrand>
+  <NavbarToggler on:click={() => (isOpen = !isOpen)} />
+  <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
+    <Nav class="ms-auto" navbar>
+      {#if isSignedIn}
+        <NavItem>
+          <NavLink href="#" on:click={() => User.signout()}>Sign out</NavLink>
+        </NavItem>
+      {:else}
+        <NavItem>
+          <NavLink on:click={() => push("/signin")}>Sign in</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink on:click={() => push("/signup")}>Sign up</NavLink>
+        </NavItem>
+      {/if}
+    </Nav>
+  </Collapse>
+</Navbar>
+
+<style>
+</style>

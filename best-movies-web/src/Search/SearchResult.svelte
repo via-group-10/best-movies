@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import SearchItem from "./SearchItem.svelte";
-    import { Circle2 } from 'svelte-loading-spinners';
+    import Spinner from "../Misc/Spinner.svelte";
     import { getMovies } from "../api";
 
     export let params = {};
@@ -27,11 +27,7 @@
         {/each}
 
     {:else}
-        <div class="row vh-100">
-            <div class="col-12 d-flex justify-content-center align-items-center">
-                <Circle2 size="100" color="#FF3E00"/>
-            </div>
-        </div>
+        <Spinner />
     {/if}
 
 </div>

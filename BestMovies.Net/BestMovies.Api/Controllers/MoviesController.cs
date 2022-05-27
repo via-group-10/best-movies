@@ -27,7 +27,6 @@ public class MoviesController : BestMoviesControllerBase
 
     // GET api/movies
     [HttpGet]
-    [Authorize(Roles = "User,Moderator")]
     public async Task<ActionResult<IEnumerable<Movie>>> GetList([FromQuery] MovieFilter? filter)
     {
         if (filter == null)
