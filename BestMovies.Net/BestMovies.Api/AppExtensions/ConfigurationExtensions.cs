@@ -1,7 +1,4 @@
-﻿using BestMovies.Api.Integrations.Models;
-using BestMovies.Api.Models;
-
-namespace BestMovies.Api.AppExtensions
+﻿namespace BestMovies.Api.AppExtensions
 {
     public static class ConfigurationExtensions
     {
@@ -13,8 +10,7 @@ namespace BestMovies.Api.AppExtensions
         {
             return configuration.GetValue<string>("TmdbKey");
         }
-
-        public static string GetImageURL(this IConfiguration configuration)
+        public static string GetImageUrlPath(this IConfiguration configuration)
         {
             return configuration.GetValue<string>("ImageUrlPath");
         }

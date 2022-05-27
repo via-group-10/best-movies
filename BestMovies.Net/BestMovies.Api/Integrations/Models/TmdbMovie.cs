@@ -1,5 +1,5 @@
 ﻿using BestMovies.Api.Models;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace BestMovies.Api.Integrations.Models
 {
@@ -7,10 +7,13 @@ namespace BestMovies.Api.Integrations.Models
     {
         public int Id { get; set; }
 
-        [JsonPropertyName("overview")]
+        [JsonProperty("overview")]
         public string? Synopsis { get; set; }
 
-        [JsonPropertyName("poster_path")]
-        public string? ImageURL {get; set;}
+        [JsonProperty("poster_path")]
+        public string? ImageUrl {get; set;}
+
+        [JsonProperty("release_date")]
+        public DateTime? releaseDate { get; set; }
     }
 }

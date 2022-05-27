@@ -1,4 +1,6 @@
 ﻿using BestMovies.Api.Data;
+using BestMovies.Api.Integrations;
+using BestMovies.Api.Integrations.Abstractions;
 using BestMovies.Api.Repository;
 using BestMovies.Api.Repository.Abstractions;
 using BestMovies.Api.Service;
@@ -18,6 +20,7 @@ public static class BestMovieApiContextExtension
             .AddDbContext<BestMoviesContext>(options => options.UseSqlServer(configuration.GetConnectionString("MoviesDatabase")))
             .AddTransient<AuthenticationService>()
             .AddTransient<IMovieService, MovieService>()
+            .AddTransient<ITmdbMoviesIntegrationsService, TmdbMoviesIntegrationsService>()
             .AddTransient<IMovieRepository, MovieRepository>()
             .AddTransient<IUserRepository, UserRepository>()
             .AddBestMoviesAuthentication(configuration)

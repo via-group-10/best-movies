@@ -4,6 +4,7 @@ using BestMovies.Api.Models.Filters;
 using BestMovies.Api.Models.RequestDTO;
 using BestMovies.Api.Repository.Abstractions;
 using BestMovies.Api.Service;
+using BestMovies.Api.Service.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -16,13 +17,16 @@ namespace BestMovies.Api.Controllers;
 public class MoviesController : BestMoviesControllerBase
 {
     private readonly IMovieRepository movieRepository;
+    private readonly IMovieService movieService;
 
 
     public MoviesController(
         IMovieRepository movieRepository, 
-        AuthenticationService authService) : base(authService)
+        AuthenticationService authService,
+        IMovieService movieService) : base(authService)
     {
         this.movieRepository = movieRepository;
+        this.movieService = movieService;
     }
 
     // GET api/movies
@@ -42,7 +46,7 @@ public class MoviesController : BestMoviesControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<Movie>> Get(int id)
     {
-        var result = await movieRepository.GetMovieByIdAsync(id);
+        var result = await movieService.GetMovieByIdAsync(id);
 
         return result != null ? Ok(result) : NotFound(new { message = $"Movie with the id {id} was not found." });
     }

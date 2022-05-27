@@ -1,12 +1,17 @@
-﻿namespace BestMovies.Api.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BestMovies.Api.Models;
 
 public class Movie
 {
     public int Id { get; set; }
     public string Title { get; set; } = null!;
+    [NotMapped]
     public int? Year { get; set; }
+    [NotMapped]
     public string? Synopsis { get; set; }
-    public string? ImageURL { get; set; }
+    [NotMapped]
+    public string? ImageUrl { get; set; }
     
     public List<Director> Directors { get; set; } = new List<Director>();
     public List<Star> Stars { get; set; } = new List<Star>();
