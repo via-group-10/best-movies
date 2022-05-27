@@ -15,25 +15,33 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
         baseQuery = baseQuery
             .Include(_ => _.Rating)
             .Include(_ => _.Stars).ThenInclude(_ => _.Person)
-            .Include(_ => _.Directors).ThenInclude(_ => _.Person)
-            .Include(_ => _.FavoredByUsers)
-            .Include(_ => _.Comments);
+            .Include(_ => _.Directors).ThenInclude(_ => _.Person);
     }
 
     public async Task<Movie?> GetMovieByIdAsync(int id)
     {
-        return await baseQuery.FirstOrDefaultAsync(m => m.Id == id);
+        var movie = await baseQuery
+            .Include(_ => _.FavoredByUsers)
+            .Include(_ => _.Comments)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (movie != null)
+        {
+            movie.Comments = movie.Comments.OrderByDescending(c => c.Created).ToList();
+            return movie;
+        }
+        else
+            return null;
     }
 
     public async Task<List<Movie>> GetMoviesAsync(MovieFilter filter)
     {
         IQueryable<Movie> query = baseQuery;
 
-        if (filter.Title is not null)
+        if (filter.Title != null)
         {
             query = baseQuery.Where(m => EF.Functions.Like(m.Title, $"%{filter.Title}%"));
         }
-
         return await query.Sort(filter).ToListAsync();
     }
 
