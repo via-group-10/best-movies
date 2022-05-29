@@ -95,3 +95,27 @@ export function postComment(movieId, comment) {
     let finalUrl = url + endpoint;
     return fetch(finalUrl, request);
 }
+
+export function getFavoriteMovies() {
+    const url = "BestMoviesApiUrl";
+    const endpoint = `/movies/myfavorite`;
+
+    const request = {
+        method: "get",
+        headers: { 'Authorization': window.localStorage.getItem('authToken') }
+    };
+
+    return fetch(url + endpoint, request);
+}
+
+export function addToFavorites(movieId) {
+    const url = "BestMoviesApiUrl";
+    const endpoint = `/movies/myfavorite/${movieId}`;
+
+    const request = {
+        method: "put",
+        headers: { 'Authorization': window.localStorage.getItem('authToken') }
+    };
+
+    return fetch(url + endpoint, request);
+}
