@@ -1,5 +1,6 @@
 ﻿using BestMovies.Api.Data;
 using BestMovies.Api.Data.Extensions;
+using BestMovies.Api.Exceptions;
 using BestMovies.Api.Models;
 using BestMovies.Api.Models.Filters;
 using BestMovies.Api.Repository.Abstractions;
@@ -15,25 +16,34 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
         baseQuery = baseQuery
             .Include(_ => _.Rating)
             .Include(_ => _.Stars).ThenInclude(_ => _.Person)
-            .Include(_ => _.Directors).ThenInclude(_ => _.Person)
-            .Include(_ => _.FavoredByUsers)
-            .Include(_ => _.Comments);
+            .Include(_ => _.Directors).ThenInclude(_ => _.Person);
     }
 
     public async Task<Movie?> GetMovieByIdAsync(int id)
     {
-        return await baseQuery.FirstOrDefaultAsync(m => m.Id == id);
+        var movie = await baseQuery
+            .Include(_ => _.FavoredByUsers)
+            .Include(_ => _.Comments)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (movie != null)
+        {
+            movie.Comments = movie.Comments.OrderByDescending(c => c.Created).ToList();
+            movie.FavoredByUsers.ForEach(um => um.User = null!);
+            return movie;
+        }
+        else
+            return null;
     }
 
     public async Task<List<Movie>> GetMoviesAsync(MovieFilter filter)
     {
         IQueryable<Movie> query = baseQuery;
 
-        if (filter.Title is not null)
+        if (filter.Title != null)
         {
             query = baseQuery.Where(m => EF.Functions.Like(m.Title, $"%{filter.Title}%"));
         }
-
         return await query.Sort(filter).ToListAsync();
     }
 
@@ -55,5 +65,64 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
         int changes = await Context.SaveChangesAsync();
 
         return changes > 0;
+    }
+
+    public async Task<bool> AddFavoriteMovieToUserAsync(string username, int movieId)
+    {
+        int changes = 0;
+        var userTask = Context.Users.Include(_ => _.FavoriteMovies).FirstOrDefaultAsync(u => u.Name == username);
+        var movieTask = Context.Movies.FindAsync(movieId);
+
+        BestMoviesUser? user = await userTask;
+
+        if (user == null || user.FavoriteMovies.Any(um => um.MovieId == movieId))
+        {
+            throw new RecordAlreadyExistsException(typeof(Movie));
+        }
+
+        Movie? movie = await movieTask;
+
+        if (movie == null)
+        {
+            return false;
+        }
+
+        user.FavoriteMovies.Add(new UserFavoriteMovie()
+        {
+            Movie = movie
+        });
+
+        changes = await Context.SaveChangesAsync();
+
+        return changes > 0;
+    }
+
+    public async Task<List<Movie>> GetMyFavoriteListAsync(string username)
+    {
+        var user = await Context.Users
+            .FirstOrDefaultAsync(u => u.Name == username);
+
+        if (user == null)
+        {
+            return new List<Movie>();
+        }
+
+        var movies = await Context.UserFavoriteMovies
+            .Include(_ => _.Movie).ThenInclude(_ => _.Rating)
+            .Include(_ => _.Movie).ThenInclude(_ => _.Stars).ThenInclude(_ => _.Person)
+            .Include(_ => _.Movie).ThenInclude(_ => _.Directors).ThenInclude(_ => _.Person)
+            .Where(fm => fm.UserId == user.Id)
+            .Select(fm => fm.Movie)
+            .ToListAsync();
+
+
+        return movies;
+    }
+
+    public async Task<List<Movie>> GetFavoriteListAsync()
+    {
+        var movies = await baseQuery
+            .Where(m => m.FavoredByUsers.Any()).ToListAsync();
+        return movies;
     }
 }

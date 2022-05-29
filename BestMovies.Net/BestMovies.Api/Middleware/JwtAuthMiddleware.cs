@@ -13,7 +13,8 @@ namespace BestMovies.Api.Middleware
 
         public async Task InvokeAsync(HttpContext context, AuthenticationService authService)
         {
-            if (authService.AuthenticateRequest(context) == false)
+            bool? authorize = await authService.AuthenticateRequest(context);
+            if (authorize == false)
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 return;
