@@ -2,32 +2,45 @@
   import { onMount } from "svelte";
   import Spinner from "../Misc/Spinner.svelte";
   import MovieComments from "./MovieComments.svelte";
-  import { getMovie } from "../api";
+  import { getMovie, addToFavorites } from "../api";
+  import { Icon, Toast, ToastBody, ToastHeader } from "sveltestrap";
 
   export let params;
-  
+
   let movie;
   let dummy_comment =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum";
 
   let id = params.id;
+  let toastMessage;
+  let isToasterOpen = false;
 
   onMount(async () => {
-    const res = await getMovie(id)
-    if (res.ok)
-    {
+    const res = await getMovie(id);
+    if (res.ok) {
       let response = await res.json();
       movie = response;
     }
   });
 
-  function handleMessage(event)
-  {
-    if (event.detail.event === 'reload') {
+  function handleMessage(event) {
+    if (event.detail.event === "reload") {
       getMovie(id)
-      .then((r) => r.json())
-      .then(b => movie = b)
+        .then((r) => r.json())
+        .then((b) => (movie = b));
     }
+  }
+
+  async function makeThisMyFavorite() {
+    const res = await addToFavorites(movie.id);
+    const data = await res.json();
+
+    triggerToast(data.message);
+  }
+
+  function triggerToast(msg) {
+    isToasterOpen = true;
+    toastMessage = msg;
   }
 </script>
 
@@ -90,7 +103,11 @@
             <h5>Director:</h5>
             {#if movie.directors}
               {#each movie.directors as director}
-                {director.person.name}{movie.directors[movie.directors.length - 1].id === director.id ? "" : ", "}
+                {director.person.name}{movie.directors[
+                  movie.directors.length - 1
+                ].id === director.id
+                  ? ""
+                  : ", "}
               {/each}
             {:else}
               -
@@ -102,7 +119,10 @@
             <h5>Stars:</h5>
             {#if movie.stars}
               {#each movie.stars as star}
-                {star.person.name}{movie.stars[movie.stars.length - 1].id === star.id ? "" : ", "}
+                {star.person.name}{movie.stars[movie.stars.length - 1].id ===
+                star.id
+                  ? ""
+                  : ", "}
               {/each}
             {/if}
           </div>
@@ -123,25 +143,51 @@
         </div>
         <div class="row mb-2">
           <div class="col-12">
-            <h5>
-              <span style="font-weight: bold">XY</span> 
-              users love this movie
-            </h5>
+            <button
+              on:click={makeThisMyFavorite}
+              type="button"
+              class="btn btn-outline-warning w-100"
+            >
+              <i class="bi bi-star" /> Make this my favorite
+            </button>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <Toast
+              autohide
+              body
+              header="Make this my favorite"
+              isOpen = {isToasterOpen}
+              on:close={() => (isToasterOpen = false)}>
+
+              {toastMessage}
+            </Toast>
+          </div>
           </div>
         </div>
         <div class="row mb-2">
           <div class="col-12">
-            <h5>
-                <span style="font-weight: bold">XY</span>
-                user comments
-            </h5>
+              <span style="font-weight: bold">
+                {movie.favoredByUsers.length}
+              </span>
+              { movie.favoredByUsers.length === 1 ? 'user' : 'users' } made this movie their favorite
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-12">
+              <span style="font-weight: bold">
+                { movie.comments.length }
+              </span>
+              user { movie.comments.length === 1 ? 'comment' : 'comments' }
           </div>
         </div>
       </div>
     </div>
     <div class="row justify-content-center mt-2">
       <div class="col-md-10">
-          <MovieComments on:message={handleMessage} movieId={movie.id} comments={movie.comments}></MovieComments>
+        <MovieComments
+          on:message={handleMessage}
+          movieId={movie.id}
+          comments={movie.comments}
+        />
       </div>
     </div>
   {:else}

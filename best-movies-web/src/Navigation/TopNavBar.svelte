@@ -26,9 +26,16 @@
 </script>
 
 <Navbar color="light" light expand="md">
-  <NavbarBrand href="/">&#x1F37F;</NavbarBrand>
+  <NavbarBrand href="/" class="px-5">&#x1F37F;</NavbarBrand>
   <NavbarToggler on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
+    <Nav class="ms-5" navbar>
+      {#if isSignedIn}
+        <NavItem>
+          <NavLink on:click={() => push("/myfavorites")}>My favorites</NavLink>
+        </NavItem>
+      {/if}
+    </Nav>
     <Nav class="ms-auto" navbar>
       {#if isSignedIn}
         <NavItem>

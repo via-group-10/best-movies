@@ -25,6 +25,11 @@ namespace BestMovies.Api.Repository
             }
         }
 
+        public async Task<BestMoviesUser?> GetUserByNameAsync(string name)
+        {
+            return await baseQuery.FirstOrDefaultAsync(u => u.Name == name);
+        }
+
         public async Task<BestMoviesUser?> RegisterUserAsync(BestMoviesUser user)
         {
             bool userExists = baseQuery.Any(u => u.Name == user.Name);
