@@ -42,7 +42,8 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
 
         if (filter.Title != null)
         {
-            query = baseQuery.Where(m => EF.Functions.Like(m.Title, $"%{filter.Title}%"));
+            string filterTitle = $"%{filter.Title}%";
+            query = baseQuery.Where(m => EF.Functions.Like(m.Title, filterTitle));
         }
         return await query.Sort(filter).ToListAsync();
     }
@@ -70,17 +71,15 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
     public async Task<bool> AddFavoriteMovieToUserAsync(string username, int movieId)
     {
         int changes = 0;
-        var userTask = Context.Users.Include(_ => _.FavoriteMovies).FirstOrDefaultAsync(u => u.Name == username);
-        var movieTask = Context.Movies.FindAsync(movieId);
+        var user = await Context.Users.Include(_ => _.FavoriteMovies).FirstOrDefaultAsync(u => u.Name == username);
+        var movie = await Context.Movies.FindAsync(movieId);
 
-        BestMoviesUser? user = await userTask;
 
         if (user == null || user.FavoriteMovies.Any(um => um.MovieId == movieId))
         {
             throw new RecordAlreadyExistsException(typeof(Movie));
         }
 
-        Movie? movie = await movieTask;
 
         if (movie == null)
         {

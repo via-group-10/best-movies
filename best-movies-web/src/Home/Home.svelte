@@ -30,7 +30,7 @@
 </div>
 
 
-
+ 
 <!-- <h1>Movies</h1>
 <MovieCarousel title = { 'First 15 movies' } ></MovieCarousel> -->
 
@@ -69,5 +69,6 @@
 		text-align: center;
 		padding: 1em;
 		margin: 0 auto;
+		overflow-x: hidden;
 	}
 </style>
