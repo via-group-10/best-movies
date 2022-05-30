@@ -10,7 +10,7 @@
     NavLink,
     NavbarBrand,
   } from "sveltestrap";
-  import { User } from "../store.js";
+  import { User } from "../store";
 
   let user;
   const unUser = User.subscribe((v) => (user = v));
