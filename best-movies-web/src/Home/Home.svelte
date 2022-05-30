@@ -31,8 +31,8 @@
 
 
 
-<h1>Movies</h1>
-<MovieCarousel title = { 'First 15 movies' } ></MovieCarousel>
+<!-- <h1>Movies</h1>
+<MovieCarousel title = { 'First 15 movies' } ></MovieCarousel> -->
 
 <style>
 	:global([data-svelte-search] input) {
@@ -55,7 +55,6 @@
 		text-align: center;
 		color: #ff3e00;
 		text-transform: uppercase;
-		font-size: 4em;
 		font-weight: 100;
 	}
 
@@ -63,15 +62,12 @@
 		text-align: center;
 		color: #ff3e00;
 		text-transform: uppercase;
-		font-size: 2em;
 		font-weight: 100;
 	}
 
 	.welcome-section {
 		text-align: center;
 		padding: 1em;
-		max-width: 50vw;
 		margin: 0 auto;
-		height: 30vh;
 	}
 </style>

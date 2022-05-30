@@ -29,7 +29,7 @@
   <NavbarBrand href="/" class="px-5">&#x1F37F;</NavbarBrand>
   <NavbarToggler on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-    <Nav class="ms-5" navbar>
+    <Nav navbar>
       {#if isSignedIn}
         <NavItem>
           <NavLink on:click={() => push("/myfavorites")}>My favorites</NavLink>

@@ -1,9 +1,8 @@
 <script>
     export let movie;
-    import { push } from 'svelte-spa-router'
-import { Badge } from 'sveltestrap';
+    import { push } from "svelte-spa-router";
+    import { Badge } from "sveltestrap";
     let synopsis = !movie.synopsis ? "Not available" : movie.synopsis;
-    console.log(synopsis);  
     let collapsable = synopsis.length > 250 ? true : false;
     let collapsed = true;
     let collapse_prompt = "show more";
@@ -22,27 +21,38 @@ import { Badge } from 'sveltestrap';
 </script>
 
 <div class="row mt-5">
-    <div class="col-12 col-lg-5 movie-picture" on:click={() => push(`/movie/${movie.id}`)}>
-        <img class="img-fluid" src="{!movie.imageUrl ? "images/img-unavailable.png" : movie.imageUrl}" alt="poster"/>
+    <div
+        class="col-12 col-lg-5 movie-picture"
+        on:click={() => push(`/movie/${movie.id}`)}
+    >
+        <img
+            class="img-fluid"
+            src={!movie.imageUrl
+                ? "images/img-unavailable.png"
+                : movie.imageUrl}
+            alt="poster"
+        />
     </div>
     <div class="col-12 col-lg-7">
         <div class="row">
             <div class="col-auto" on:click={() => push(`/movie/${movie.id}`)}>
-                <h2 class="movie-title">{ movie.title }  {!movie.year ? "" : `(${movie.year})`}</h2>
+                <h2 class="movie-title">
+                    {movie.title}
+                    {!movie.year ? "" : `(${movie.year})`}
+                </h2>
             </div>
 
             <div class="col-lg" style="padding-top:0.8rem">
-                Rating: 
-                
+                Rating:
+
                 {#if movie.rating}
-                <Badge color="warning">
-                    { movie.rating.value } 
-                        <small>({ movie.rating.votes } votes)</small>
+                    <Badge color="warning">
+                        {movie.rating.value}
+                        <i class="bi bi-star" />
+                        <small>({movie.rating.votes} votes)</small>
                     </Badge>
                 {:else}
-                <Badge color="secondary">
-                    unavailable
-                </Badge>
+                    <Badge color="secondary">unavailable</Badge>
                 {/if}
             </div>
         </div>
@@ -51,7 +61,10 @@ import { Badge } from 'sveltestrap';
                 <strong>Starring:</strong>
                 {#if movie.stars.length > 0}
                     {#each movie.stars as star}
-                        { star.person.name }{ movie.stars[movie.stars.length-1].id === star.id ? '' : ', ' }
+                        {star.person.name}{movie.stars[movie.stars.length - 1]
+                            .id === star.id
+                            ? ""
+                            : ", "}
                     {/each}
                 {:else}
                     Unknown
@@ -62,7 +75,7 @@ import { Badge } from 'sveltestrap';
             <div class="col-md movie-synopsis">
                 {#if collapsable}
                     <p style="font-size:1.2rem">
-                        <strong>Synopsis:</strong> <br/>
+                        <strong>Synopsis:</strong> <br />
                         {displayed_synopsis}
                         <span
                             class="collapse-prompt"
@@ -89,19 +102,19 @@ import { Badge } from 'sveltestrap';
         aspect-ratio: 16/9;
     }
 
-    .movie-title:hover{
+    .movie-title:hover {
         color: blue;
         cursor: pointer;
         transition: color 200ms linear;
     }
 
-    .movie-picture:hover{
+    .movie-picture:hover {
         opacity: 0.6;
         cursor: pointer;
         transition: opacity 300ms ease-out;
     }
 
-    .collapse-prompt:hover{
+    .collapse-prompt:hover {
         cursor: pointer;
     }
 
