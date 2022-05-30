@@ -5,9 +5,9 @@ using BestMovies.Api.Models.Filters;
 using BestMovies.Api.Models.RequestDTO;
 using BestMovies.Api.Repository.Abstractions;
 using BestMovies.Api.Service;
+using BestMovies.Api.Service.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BestMovies.Api.Controllers;
 
@@ -16,14 +16,14 @@ namespace BestMovies.Api.Controllers;
 [Authorize]
 public class MoviesController : BestMoviesControllerBase
 {
-    private readonly IMovieRepository movieRepository;
+    private readonly IMovieService movieService;
 
 
     public MoviesController(
-        IMovieRepository movieRepository,
+        IMovieService movieService,
         AuthenticationService authService) : base(authService)
     {
-        this.movieRepository = movieRepository;
+        this.movieService = movieService;
     }
 
     // GET api/movies
@@ -34,7 +34,7 @@ public class MoviesController : BestMoviesControllerBase
         {
             filter = new MovieFilter();
         }
-        var result = await movieRepository.GetMoviesAsync(filter);
+        var result = await movieService.GetMoviesByIdAsync(filter);
         return Ok(result);
     }
 
@@ -42,7 +42,7 @@ public class MoviesController : BestMoviesControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Movie>> Get(int id)
     {
-        var result = await movieRepository.GetMovieByIdAsync(id);
+        var result = await movieService.GetMovieByIdAsync(id);
 
         return result != null ? Ok(result) : NotFound(new { message = $"Movie with the id {id} was not found." });
     }
@@ -62,7 +62,7 @@ public class MoviesController : BestMoviesControllerBase
             Username = username,
             Text = commentRequest.Text
         };
-        var result = await movieRepository.AddCommentToMovieAsync(movieId, comment);
+        var result = await movieService.AddCommentToMovieAsync(movieId, comment);
         return result ? Ok(new { message = "Comment was successfully posted." }) : BadRequest(new { message = "Comment was not posted." });
     }
 
@@ -78,7 +78,7 @@ public class MoviesController : BestMoviesControllerBase
                 return BadRequest(new { message = "A co si ty ked nemas meno, hmm!?" });
             }
 
-            bool result = await movieRepository.AddFavoriteMovieToUserAsync(username, movieId);
+            bool result = await movieService.AddFavoriteMovieToUserAsync(username, movieId);
             return result ? Ok(new { message = "Movie was successfully added to your favorites." }) : BadRequest(new { message = "Movie was not added to you favorites." });
         }
         catch (RecordAlreadyExistsException ex)
@@ -98,14 +98,14 @@ public class MoviesController : BestMoviesControllerBase
             return BadRequest(new { message = "A co si ty ked nemas meno, hmm!?" });
         }
 
-        List<Movie> result = await movieRepository.GetMyFavoriteListAsync(username);
+        List<Movie> result = await movieService.GetMyFavoriteListAsync(username);
         return Ok(result);
     }
 
     [HttpGet("favorite")]
     public async Task<ActionResult> FavoriteMovies()
     {
-        List<Movie> result = await movieRepository.GetFavoriteListAsync();
+        List<Movie> result = await movieService.GetFavoriteListAsync();
         return Ok(result);
     }
 }

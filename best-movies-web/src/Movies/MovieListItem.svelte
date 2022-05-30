@@ -1,9 +1,9 @@
 <script>
     export let movie;
     import { push } from 'svelte-spa-router'
-    let synopsis =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum viverra, nulla felis vulputate tortor, non placerat nunc lectus id eros. Aliquam id tellus sit amet metus molestie varius. Aenean accumsan gravida nibh, sed faucibus magna. Mauris eleifend dictum tortor ac dictum. Vestibulum maximus molestie porta.";
-
+import { Badge } from 'sveltestrap';
+    let synopsis = !movie.synopsis ? "Not available" : movie.synopsis;
+    console.log(synopsis);  
     let collapsable = synopsis.length > 250 ? true : false;
     let collapsed = true;
     let collapse_prompt = "show more";
@@ -22,41 +22,47 @@
 </script>
 
 <div class="row mt-5">
-    <div class="col-12 col-lg-5" on:click={() => push(`/movie/${movie.id}`)}>
-        <!--TODO ADD movie picture-->
-        <div class="movie-picture" />
+    <div class="col-12 col-lg-5 movie-picture" on:click={() => push(`/movie/${movie.id}`)}>
+        <img class="img-fluid" src="{!movie.imageUrl ? "images/img-unavailable.png" : movie.imageUrl}" alt="poster"/>
     </div>
     <div class="col-12 col-lg-7">
         <div class="row">
             <div class="col-auto" on:click={() => push(`/movie/${movie.id}`)}>
-                <h2 class="movie-title">{ movie.title }</h2>
+                <h2 class="movie-title">{ movie.title }  {!movie.year ? "" : `(${movie.year})`}</h2>
             </div>
 
             <div class="col-lg" style="padding-top:0.8rem">
                 Rating: 
+                
                 {#if movie.rating}
-                    { movie.rating.value } <small>({ movie.rating.votes } votes)</small>
+                <Badge color="warning">
+                    { movie.rating.value } 
+                        <small>({ movie.rating.votes } votes)</small>
+                    </Badge>
                 {:else}
-                    <small>unavailable</small>
+                <Badge color="secondary">
+                    unavailable
+                </Badge>
                 {/if}
             </div>
         </div>
         <div class="row">
             <div class="col-md movie-stars">
                 <strong>Starring:</strong>
-                {#if movie.stars}
+                {#if movie.stars.length > 0}
                     {#each movie.stars as star}
                         { star.person.name }{ movie.stars[movie.stars.length-1].id === star.id ? '' : ', ' }
                     {/each}
+                {:else}
+                    Unknown
                 {/if}
             </div>
         </div>
         <div class="row">
             <div class="col-md movie-synopsis">
                 {#if collapsable}
-                    <!--TODO ADD synopsis-->
                     <p style="font-size:1.2rem">
-                        Synopsis: <br />
+                        <strong>Synopsis:</strong> <br/>
                         {displayed_synopsis}
                         <span
                             class="collapse-prompt"
@@ -65,8 +71,8 @@
                         >
                     </p>
                 {:else}
-                    <p>
-                        Synopsis: <br />
+                    <p style="font-size:1.2rem">
+                        <strong>Synopsis:</strong> <br />
                         {synopsis}
                     </p>
                 {/if}
@@ -78,7 +84,8 @@
 <style>
     .movie-picture {
         display: block;
-        background-color: blanchedalmond;
+        max-width: 15rem;
+        max-height: 8rem;
         aspect-ratio: 16/9;
     }
 

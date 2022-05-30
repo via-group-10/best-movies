@@ -18,7 +18,7 @@
 
   $: isSignedIn = !!user;
 
-  let isOpen = true;
+  let isOpen = false;
 
   function handleUpdate(event) {
     isOpen = event.detail.isOpen;
