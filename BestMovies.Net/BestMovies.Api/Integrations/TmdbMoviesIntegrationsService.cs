@@ -4,6 +4,7 @@ using BestMovies.Api.AppExtensions;
 using System.Text.Json;
 using BestMovies.Api.Integrations.Abstractions;
 using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace BestMovies.Api.Integrations
 {
@@ -18,13 +19,13 @@ namespace BestMovies.Api.Integrations
         {
             this.configuration = configuration;
             this.client = client;
-            path = @"https://api.themoviedb.org/3/find/tt00";
+            path = @"https://api.themoviedb.org/3/find/";
             externalSource = @"&external_source=imdb_id";
         }
 
         public async Task<TmdbMovie?> GetMovieByIdAsync(int movieId)
         {
-            var response = await client.GetAsync(path + movieId + configuration.GetTmdbApiKey() + externalSource);
+            var response = await client.GetAsync(BuildUrl(movieId));
             if(response.IsSuccessStatusCode)
             {
                 var stringResult = await response.Content.ReadAsStringAsync();
@@ -69,6 +70,23 @@ namespace BestMovies.Api.Integrations
                 responses.Add(response);
             }
             return responses;
+        }
+
+        private string GetKey(int movieId)
+        {
+            var zeroCount = 7 - movieId.ToString().Length;
+            var builder = new StringBuilder();
+            builder.Append("tt");
+            for(var i = 0; i < zeroCount; i++)
+            {
+                builder.Append("0");
+            }
+            builder.Append(movieId);
+            return builder.ToString();
+        }
+        private string BuildUrl(int movieId)
+        {
+            return path + GetKey(movieId) + configuration.GetTmdbApiKey() + externalSource;
         }
     }
 }

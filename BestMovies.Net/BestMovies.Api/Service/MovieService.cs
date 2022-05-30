@@ -19,36 +19,52 @@ namespace BestMovies.Api.Service
             this.movieRepository = movieRepository;
             this.configuration = configuration;
         }
+
+        public async Task<bool> AddCommentToMovieAsync(int movieId, Comment comment)
+        {
+            return await movieRepository.AddCommentToMovieAsync(movieId, comment);
+        }
+
+        public async Task<bool> AddFavoriteMovieToUserAsync(string username, int movieId)
+        {
+            return await movieRepository.AddFavoriteMovieToUserAsync(username, movieId);
+        }
+
+        public async Task<List<Movie>> GetFavoriteListAsync()
+        {
+            return await movieRepository.GetFavoriteListAsync();
+        }
+
         public async Task<Movie?> GetMovieByIdAsync(int movieId)
         {
             TmdbMovie? tmdbMovie = await tmdbMoviesIntegrations.GetMovieByIdAsync(movieId);
             Movie? movie = await movieRepository.GetMovieByIdAsync(movieId);
-            if(tmdbMovie == null)
-            {
-                return movie;
-            }
-            else
-            {
             return TmdbMovieToMovie(movie!, tmdbMovie!);
-            }
-            
         }
 
-        public async Task<List<Movie?>> GetMoviesByIdAsync(MovieFilter? filter)
+        public async Task<List<Movie>> GetMoviesByIdAsync(MovieFilter? filter)
         {
             if (filter == null)
             {
                 filter = new MovieFilter();
             }
             List<Movie> movies = await movieRepository.GetMoviesAsync(filter);
-            var results = new List<Movie?>();
+            var results = new List<Movie>();
             foreach(var movie in movies)
             {
                 var tmdbMovie = await tmdbMoviesIntegrations.GetMovieByIdAsync(movie.Id);
-                if (tmdbMovie == null)
-                {
-                    results.Add(movie);
-                }
+                results.Add(TmdbMovieToMovie(movie!, tmdbMovie!));
+            }
+            return results;
+        }
+
+        public async Task<List<Movie>> GetMyFavoriteListAsync(string username)
+        {
+            List<Movie> movies = await movieRepository.GetMyFavoriteListAsync(username);
+            var results = new List<Movie>();
+            foreach(var movie in movies)
+            {
+                var tmdbMovie = await tmdbMoviesIntegrations.GetMovieByIdAsync(movie.Id);
                 results.Add(TmdbMovieToMovie(movie!, tmdbMovie!));
             }
             return results;
@@ -56,7 +72,7 @@ namespace BestMovies.Api.Service
 
         public Movie TmdbMovieToMovie(Movie movie, TmdbMovie tmdbMovie)
         {
-            if (tmdbMovie.Id == movie.Id)
+            if (tmdbMovie != null && tmdbMovie.Id == movie.Id)
             {
                 if (tmdbMovie.ImageUrl != null)
                 {

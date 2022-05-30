@@ -3,7 +3,7 @@
   import Spinner from "../Misc/Spinner.svelte";
   import MovieComments from "./MovieComments.svelte";
   import { getMovie, addToFavorites } from "../api";
-  import { Icon, Toast, ToastBody, ToastHeader } from "sveltestrap";
+  import { Badge, Icon, Toast, ToastBody, ToastHeader } from "sveltestrap";
 
   export let params;
 
@@ -51,11 +51,13 @@
       <div class="col-md-4 d-md-block d-none">
         <h4 class="mb-0">
           IMDB Score:
+          <Badge color="warning">
           {#if movie.rating}
             {movie.rating.value}
           {/if}
-          <span style="color:yellow">&#9733;</span>
-        </h4>
+          <i class="bi bi-star"/>
+        </Badge>
+          </h4>
         <h6>
           {#if movie.rating}
             ({movie.rating.votes})

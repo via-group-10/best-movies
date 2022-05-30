@@ -122,7 +122,7 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
     public async Task<List<Movie>> GetFavoriteListAsync()
     {
         var movies = await baseQuery
-            .Where(m => m.FavoredByUsers.Any()).ToListAsync();
+            .Where(m => m.FavoredByUsers.Any()).Take(15).ToListAsync();
         return movies;
     }
 }

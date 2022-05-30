@@ -1,7 +1,9 @@
 <script>
     export let movie;
     import { push } from 'svelte-spa-router'
-    let synopsis = movie.synopsis;
+import { Badge } from 'sveltestrap';
+    let synopsis = !movie.synopsis ? "Not available" : movie.synopsis;
+    console.log(synopsis);  
     let collapsable = synopsis.length > 250 ? true : false;
     let collapsed = true;
     let collapse_prompt = "show more";
@@ -35,10 +37,16 @@
 
             <div class="col-lg" style="padding-top:0.8rem">
                 Rating: 
+                
                 {#if movie.rating}
-                    { movie.rating.value } <small>({ movie.rating.votes } votes)</small>
+                <Badge color="warning">
+                    { movie.rating.value } 
+                        <small>({ movie.rating.votes } votes)</small>
+                    </Badge>
                 {:else}
-                    <small>unavailable</small>
+                <Badge color="secondary">
+                    unavailable
+                </Badge>
                 {/if}
             </div>
         </div>
@@ -55,9 +63,8 @@
         <div class="row">
             <div class="col-md movie-synopsis">
                 {#if collapsable}
-                    <!--TODO ADD synopsis-->
                     <p style="font-size:1.2rem">
-                        Synopsis: <br />
+                        <strong>Synopsis:</strong> <br/>
                         {displayed_synopsis}
                         <span
                             class="collapse-prompt"
@@ -67,8 +74,8 @@
                     </p>
                 {:else}
                     <p style="font-size:1.2rem">
-                        Synopsis: <br />
-                        {movie.synopsis}
+                        <strong>Synopsis:</strong> <br />
+                        {synopsis}
                     </p>
                 {/if}
             </div>

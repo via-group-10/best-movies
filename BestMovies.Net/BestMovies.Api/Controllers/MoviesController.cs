@@ -16,16 +16,13 @@ namespace BestMovies.Api.Controllers;
 [Authorize]
 public class MoviesController : BestMoviesControllerBase
 {
-    private readonly IMovieRepository movieRepository;
     private readonly IMovieService movieService;
 
 
     public MoviesController(
-        IMovieRepository movieRepository,
         IMovieService movieService,
         AuthenticationService authService) : base(authService)
     {
-        this.movieRepository = movieRepository;
         this.movieService = movieService;
     }
 
@@ -65,7 +62,7 @@ public class MoviesController : BestMoviesControllerBase
             Username = username,
             Text = commentRequest.Text
         };
-        var result = await movieRepository.AddCommentToMovieAsync(movieId, comment);
+        var result = await movieService.AddCommentToMovieAsync(movieId, comment);
         return result ? Ok(new { message = "Comment was successfully posted." }) : BadRequest(new { message = "Comment was not posted." });
     }
 
@@ -81,7 +78,7 @@ public class MoviesController : BestMoviesControllerBase
                 return BadRequest(new { message = "A co si ty ked nemas meno, hmm!?" });
             }
 
-            bool result = await movieRepository.AddFavoriteMovieToUserAsync(username, movieId);
+            bool result = await movieService.AddFavoriteMovieToUserAsync(username, movieId);
             return result ? Ok(new { message = "Movie was successfully added to your favorites." }) : BadRequest(new { message = "Movie was not added to you favorites." });
         }
         catch (RecordAlreadyExistsException ex)
@@ -101,14 +98,14 @@ public class MoviesController : BestMoviesControllerBase
             return BadRequest(new { message = "A co si ty ked nemas meno, hmm!?" });
         }
 
-        List<Movie> result = await movieRepository.GetMyFavoriteListAsync(username);
+        List<Movie> result = await movieService.GetMyFavoriteListAsync(username);
         return Ok(result);
     }
 
     [HttpGet("favorite")]
     public async Task<ActionResult> FavoriteMovies()
     {
-        List<Movie> result = await movieRepository.GetFavoriteListAsync();
+        List<Movie> result = await movieService.GetFavoriteListAsync();
         return Ok(result);
     }
 }

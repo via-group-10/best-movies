@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import MovieListItem from "../Movies/MovieListItem.svelte";
   import Spinner from "../Misc/Spinner.svelte";
   import { getFavoriteMovies } from "../api";
