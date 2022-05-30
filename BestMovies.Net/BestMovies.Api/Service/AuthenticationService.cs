@@ -21,7 +21,7 @@ namespace BestMovies.Api.Service
             this.userRepository = userRepository;
         }
 
-        public bool? AuthenticateRequest(HttpContext context)
+        public async Task<bool?> AuthenticateRequest(HttpContext context)
         {
             try
             {
@@ -42,10 +42,10 @@ namespace BestMovies.Api.Service
                 var bmUser = ClaimsToUser(jwtToken.Claims);
 
                 // TODO - dotiahnutie detailu z DB
-                // bmUser = apiManager.GetPouzivatelByEmail(bmUser.LoginName);
+                bmUser = await userRepository.GetUserByNameAsync(bmUser.Name);
 
                 // context.User = new ClaimsPrincipal(bmUser);
-                context.User = new GenericPrincipal(new ClaimsIdentity(bmUser), new[] { bmUser.Rola.ToString() });
+                context.User = new GenericPrincipal(new ClaimsIdentity(bmUser!), new[] { bmUser!.Rola.ToString() });
             }
             catch (Exception ex)
             {

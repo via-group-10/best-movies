@@ -1,9 +1,7 @@
 <script>
     export let movie;
     import { push } from 'svelte-spa-router'
-    let synopsis =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in erat sollicitudin eros auctor fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec finibus, tellus nec rutrum viverra, nulla felis vulputate tortor, non placerat nunc lectus id eros. Aliquam id tellus sit amet metus molestie varius. Aenean accumsan gravida nibh, sed faucibus magna. Mauris eleifend dictum tortor ac dictum. Vestibulum maximus molestie porta.";
-
+    let synopsis = movie.synopsis;
     let collapsable = synopsis.length > 250 ? true : false;
     let collapsed = true;
     let collapse_prompt = "show more";
@@ -22,9 +20,12 @@
 </script>
 
 <div class="row mt-5">
-    <div class="col-12 col-lg-5" on:click={() => push(`/movie/${movie.id}`)}>
-        <!--TODO ADD movie picture-->
-        <div class="movie-picture" />
+    <div class="col-12 col-lg-5 movie-picture" on:click={() => push(`/movie/${movie.id}`)}>
+        {#if movie.imageUrl}
+        <img class="img-fluid" src="{movie.imageUrl}" alt="Movie Image"/>
+        {:else}
+        <img class="img-fluid" src="images/img-unavailable.png" alt="Movie Image"/>
+        {/if}
     </div>
     <div class="col-12 col-lg-7">
         <div class="row">
@@ -65,9 +66,9 @@
                         >
                     </p>
                 {:else}
-                    <p>
+                    <p style="font-size:1.2rem">
                         Synopsis: <br />
-                        {synopsis}
+                        {movie.synopsis}
                     </p>
                 {/if}
             </div>
@@ -78,7 +79,8 @@
 <style>
     .movie-picture {
         display: block;
-        background-color: blanchedalmond;
+        max-width: 15rem;
+        max-height: 8rem;
         aspect-ratio: 16/9;
     }
 

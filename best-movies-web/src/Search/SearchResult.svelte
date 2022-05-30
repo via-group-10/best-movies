@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import SearchItem from "./SearchItem.svelte";
+    import MovieListItem from "../Movies/MovieListItem.svelte";
     import Spinner from "../Misc/Spinner.svelte";
     import { getMovies } from "../api";
 
@@ -23,7 +23,7 @@
     {#if movies}
 
         {#each movies as movie, i (movie.id)}
-            <SearchItem movie={movie}></SearchItem>
+            <MovieListItem movie={movie}></MovieListItem>
         {/each}
 
     {:else}

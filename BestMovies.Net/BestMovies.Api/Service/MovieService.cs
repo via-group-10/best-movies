@@ -2,6 +2,7 @@
 using BestMovies.Api.Integrations.Abstractions;
 using BestMovies.Api.Integrations.Models;
 using BestMovies.Api.Models;
+using BestMovies.Api.Models.Filters;
 using BestMovies.Api.Repository.Abstractions;
 using BestMovies.Api.Service.Abstractions;
 
@@ -33,12 +34,22 @@ namespace BestMovies.Api.Service
             
         }
 
-        public async Task<List<Movie?>> GetMoviesByIdAsync(List<int> movieIds)
+        public async Task<List<Movie?>> GetMoviesByIdAsync(MovieFilter? filter)
         {
-            var results = new List<Movie?>();
-            foreach(var movieId in movieIds)
+            if (filter == null)
             {
-                results.Add(await GetMovieByIdAsync(movieId));
+                filter = new MovieFilter();
+            }
+            List<Movie> movies = await movieRepository.GetMoviesAsync(filter);
+            var results = new List<Movie?>();
+            foreach(var movie in movies)
+            {
+                var tmdbMovie = await tmdbMoviesIntegrations.GetMovieByIdAsync(movie.Id);
+                if (tmdbMovie == null)
+                {
+                    results.Add(movie);
+                }
+                results.Add(TmdbMovieToMovie(movie!, tmdbMovie!));
             }
             return results;
         }
@@ -47,7 +58,10 @@ namespace BestMovies.Api.Service
         {
             if (tmdbMovie.Id == movie.Id)
             {
-                movie.ImageUrl = configuration.GetImageUrlPath() + tmdbMovie.ImageUrl;
+                if (tmdbMovie.ImageUrl != null)
+                {
+                    movie.ImageUrl = configuration.GetImageUrlPath() + tmdbMovie.ImageUrl;
+                }
                 movie.Synopsis = tmdbMovie.Synopsis;
                 movie.Year = tmdbMovie.releaseDate!.Value.Year;
             }

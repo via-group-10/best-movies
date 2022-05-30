@@ -6,6 +6,7 @@ namespace BestMovies.Api.Data
     public partial class BestMoviesContext
     {
         public virtual DbSet<BestMoviesUser> Users { get; set; } = null!;
+        public virtual DbSet<UserFavoriteMovie> UserFavoriteMovies { get; set; } = null!;
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
