@@ -23,16 +23,12 @@ import { Badge } from 'sveltestrap';
 
 <div class="row mt-5">
     <div class="col-12 col-lg-5 movie-picture" on:click={() => push(`/movie/${movie.id}`)}>
-        {#if movie.imageUrl}
-        <img class="img-fluid" src="{movie.imageUrl}" alt="Movie Image"/>
-        {:else}
-        <img class="img-fluid" src="images/img-unavailable.png" alt="Movie Image"/>
-        {/if}
+        <img class="img-fluid" src="{!movie.imageUrl ? "images/img-unavailable.png" : movie.imageUrl}" alt="poster"/>
     </div>
     <div class="col-12 col-lg-7">
         <div class="row">
             <div class="col-auto" on:click={() => push(`/movie/${movie.id}`)}>
-                <h2 class="movie-title">{ movie.title }</h2>
+                <h2 class="movie-title">{ movie.title }  {!movie.year ? "" : `(${movie.year})`}</h2>
             </div>
 
             <div class="col-lg" style="padding-top:0.8rem">
@@ -53,10 +49,12 @@ import { Badge } from 'sveltestrap';
         <div class="row">
             <div class="col-md movie-stars">
                 <strong>Starring:</strong>
-                {#if movie.stars}
+                {#if movie.stars.length > 0}
                     {#each movie.stars as star}
                         { star.person.name }{ movie.stars[movie.stars.length-1].id === star.id ? '' : ', ' }
                     {/each}
+                {:else}
+                    Unknown
                 {/if}
             </div>
         </div>

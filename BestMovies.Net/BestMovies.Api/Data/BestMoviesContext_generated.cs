@@ -67,6 +67,10 @@ namespace BestMovies.Api.Data
                 entity.Property(e => e.Title)
                     .HasColumnName("title");
 
+                entity.Ignore(e => e.Year);
+                entity.Ignore(e => e.ImageUrl);
+                entity.Ignore(e => e.Synopsis);
+
             });
 
             modelBuilder.Entity<Person>(entity =>

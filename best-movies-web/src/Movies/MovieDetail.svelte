@@ -3,7 +3,7 @@
   import Spinner from "../Misc/Spinner.svelte";
   import MovieComments from "./MovieComments.svelte";
   import { getMovie, addToFavorites } from "../api";
-  import { Badge, Icon, Toast, ToastBody, ToastHeader } from "sveltestrap";
+  import { Badge, Toast } from "sveltestrap";
 
   export let params;
 
@@ -46,41 +46,40 @@
   {#if movie}
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <h2 style="margin-bottom:0">{movie.title}</h2>
+        <h2 style="margin-bottom:0">
+          {movie.title}
+          {!movie.year ? "" : `(${movie.year})`}
+        </h2>
       </div>
       <div class="col-md-4 d-md-block d-none">
         <h4 class="mb-0">
           IMDB Score:
-          <Badge color="warning">
           {#if movie.rating}
-            {movie.rating.value}
+            <Badge color="warning">
+              {movie.rating.value}
+              <i class="bi bi-star" />
+            </Badge>
+            <h6>({movie.rating.votes}) votes</h6>
+          {:else}
+            <Badge color="secondary">
+              unavailable
+              <i class="bi bi-star" />
+            </Badge>
           {/if}
-          <i class="bi bi-star"/>
-        </Badge>
-          </h4>
-        <h6>
-          {#if movie.rating}
-            ({movie.rating.votes})
-          {/if}
-          votes
-        </h6>
+        </h4>
       </div>
     </div>
     <div class="row mt-2 justify-content-center">
       <div class="col-12 col-md-10 mb-2">
         <div class="movie-picture d-flex justify-content-center">
-          {#if movie.imageUrl}
-          <img class="img-fluid" src="{movie.imageUrl}" alt="Movie Image"/>
-          {:else}
-          <img class="img-fluid" src="images/img-unavailable.png" alt="Movie Image"/>
-          {/if}
-          </div>
+            <img class="img-fluid" src={!movie.imageUrl ? "images/img-unavailable.png" : movie.imageUrl} alt="poster" />
+        </div>
       </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-10 text-left border-bottom">
         <p style="font-size:1.2rem">
-          {movie.synopsis}
+          {!movie.synopsis ? "Synopsis not available" : movie.synopsis}
         </p>
       </div>
     </div>
@@ -89,9 +88,18 @@
         <div class="row d-md-none mb-2">
           <div class="col-md-12 ">
             <h5>
-              Rating:
-              {#if movie.rating != null}
-                {movie.rating.value}
+              IMDB Score:
+              {#if movie.rating}
+                <Badge color="warning">
+                  {movie.rating.value}
+                  <i class="bi bi-star" />
+                </Badge>
+                ({movie.rating.votes}) votes
+              {:else}
+                <Badge color="secondary">
+                  unavailable
+                  <i class="bi bi-star" />
+                </Badge>
               {/if}
             </h5>
           </div>
@@ -99,7 +107,7 @@
         <div class="row mb-2">
           <div class="col-md-12">
             <h5>Director:</h5>
-            {#if movie.directors}
+            {#if movie.directors.length > 0}
               {#each movie.directors as director}
                 {director.person.name}{movie.directors[
                   movie.directors.length - 1
@@ -108,37 +116,27 @@
                   : ", "}
               {/each}
             {:else}
-              -
+              Unknown
             {/if}
           </div>
         </div>
         <div class="row mb-2">
           <div class="col-md-12 ">
             <h5>Stars:</h5>
-            {#if movie.stars}
+            {#if movie.stars.length > 0}
               {#each movie.stars as star}
                 {star.person.name}{movie.stars[movie.stars.length - 1].id ===
                 star.id
                   ? ""
                   : ", "}
               {/each}
+            {:else}
+                Unknown
             {/if}
           </div>
         </div>
       </div>
       <div class="col-md-3 col-4 border-bottom">
-        <div class="row d-md-none mb-2">
-          <div class="col-12">
-            <h5>
-              <span style="font-weight: bold">
-                {#if movie.rating}
-                  ({movie.rating.votes} )
-                {/if}
-              </span>
-              IMDB ratings
-            </h5>
-          </div>
-        </div>
         <div class="row mb-2">
           <div class="col-12">
             <button
@@ -149,32 +147,33 @@
               <i class="bi bi-star" /> Make this my favorite
             </button>
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <Toast
-              autohide
-              body
-              header="Make this my favorite"
-              isOpen = {isToasterOpen}
-              on:close={() => (isToasterOpen = false)}>
-
-              {toastMessage}
-            </Toast>
-          </div>
-          </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-12">
-              <span style="font-weight: bold">
-                {movie.favoredByUsers.length}
-              </span>
-              { movie.favoredByUsers.length === 1 ? 'user' : 'users' } made this movie their favorite
+              <Toast
+                autohide
+                body
+                header="Make this my favorite"
+                isOpen={isToasterOpen}
+                on:close={() => (isToasterOpen = false)}
+              >
+                {toastMessage}
+              </Toast>
+            </div>
           </div>
         </div>
         <div class="row mb-2">
           <div class="col-12">
-              <span style="font-weight: bold">
-                { movie.comments.length }
-              </span>
-              user { movie.comments.length === 1 ? 'comment' : 'comments' }
+            <span style="font-weight: bold">
+              {movie.favoredByUsers.length}
+            </span>
+            {movie.favoredByUsers.length === 1 ? "user" : "users"} made this movie
+            their favorite
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-12">
+            <span style="font-weight: bold">
+              {movie.comments.length}
+            </span>
+            user {movie.comments.length === 1 ? "comment" : "comments"}
           </div>
         </div>
       </div>
@@ -195,7 +194,7 @@
 
 <style>
   .movie-picture {
-        display: block;
-        aspect-ratio: 16/9;
-    }
+    display: block;
+    aspect-ratio: 16/9;
+  }
 </style>

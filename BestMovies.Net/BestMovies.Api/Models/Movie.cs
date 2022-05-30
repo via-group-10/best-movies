@@ -6,11 +6,11 @@ public class Movie
 {
     public int Id { get; set; }
     public string Title { get; set; } = null!;
-    [NotMapped]
+    
     public int? Year { get; set; }
-    [NotMapped]
+    
     public string? Synopsis { get; set; }
-    [NotMapped]
+    
     public string? ImageUrl { get; set; }
     
     public List<Director> Directors { get; set; } = new List<Director>();
