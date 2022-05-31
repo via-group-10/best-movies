@@ -27,6 +27,7 @@
             movies = !movies ? resBody: [...movies, ...resBody];
         }
         else{
+            movies = [];
             hasMoreResults = false;
         }
     }
@@ -60,7 +61,7 @@
 
     {#if !hasMoreResults}
         <Alert color = "info" class="text-center my-5">
-            <h4 class="alert-heading text-capitalize"> <Icon name="info-circle-fill"/> Has no more results</h4>
+            <h4 class="alert-heading text-capitalize"> <Icon name="info-circle-fill"/> No results</h4>
         </Alert>
     {/if}
 
