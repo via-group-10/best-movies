@@ -1,14 +1,6 @@
 version: '3.9'
 
 services:
-  #best-movies-proxy:
-  #  build:
-  #    context: ./best-movies-proxy
-  #    dockerfile: Dockerfile
-  #  image: antonjanto/best-movies-proxy
-  #  container_name: best-movies-proxy
-  #  ports:
-  #    - 80:80
 
   best-movies-web:
     build:
@@ -18,10 +10,6 @@ services:
     container_name: best-movies-web
     ports:
       - 80:80
-    links:
-      - "best-movies-api:api"
-    #depends_on:
-    #  - best-movies-proxy
   
   best-movies-api:
     build: 
@@ -31,5 +19,3 @@ services:
     container_name: best-movies-api
     ports:
       - 5000:80
-    #depends_on:
-    #  - best-movies-proxy
