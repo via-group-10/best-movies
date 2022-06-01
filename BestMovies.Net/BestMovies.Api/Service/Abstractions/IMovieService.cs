@@ -7,7 +7,7 @@ namespace BestMovies.Api.Service.Abstractions
     public interface IMovieService
     {
         Task<Movie?> GetMovieByIdAsync(int movieId);
-        Task<List<Movie>> GetMoviesByIdAsync(MovieFilter filter);
+        Task<List<Movie>> GetMoviesByFilterAsync(MovieFilter filter);
         Movie TmdbMovieToMovie(Movie movie, TmdbMovie tmdbMovie);
         Task<List<Movie>> GetMyFavoriteListAsync(string username);
         Task<List<Movie>> GetFavoriteListAsync();
