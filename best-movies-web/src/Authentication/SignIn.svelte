@@ -9,7 +9,7 @@
   const submit = async () => {
     let res = await signin(username, password);
     let response = await res.json()
-    
+     
     if (res.ok) {
       User.signin(response.authToken);
       push("/");
