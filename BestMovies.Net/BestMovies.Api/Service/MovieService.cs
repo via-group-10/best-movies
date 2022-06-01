@@ -42,7 +42,7 @@ namespace BestMovies.Api.Service
             return TmdbMovieToMovie(movie!, tmdbMovie!);
         }
 
-        public async Task<List<Movie>> GetMoviesByIdAsync(MovieFilter? filter)
+        public async Task<List<Movie>> GetMoviesByFilterAsync(MovieFilter? filter)
         {
             if (filter == null)
             {

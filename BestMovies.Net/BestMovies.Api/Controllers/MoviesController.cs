@@ -34,7 +34,7 @@ public class MoviesController : BestMoviesControllerBase
         {
             filter = new MovieFilter();
         }
-        var result = await movieService.GetMoviesByIdAsync(filter);
+        var result = await movieService.GetMoviesByFilterAsync(filter);
         return Ok(result);
     }
 
