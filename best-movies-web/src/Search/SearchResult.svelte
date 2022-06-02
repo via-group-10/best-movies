@@ -31,7 +31,9 @@
                                 ? resBody
                                 : [...movies, ...resBody];
                         } else {
-                            movies = [];
+                            if  (!movies) {
+                                movies = [];
+                            }
                             hasMoreResults = false;
                         }
                     });
