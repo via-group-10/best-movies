@@ -32,6 +32,7 @@
                                 : [...movies, ...resBody];
                         } else {
                             if  (!movies) {
+                                // don't reset movies
                                 movies = [];
                             }
                             hasMoreResults = false;
