@@ -112,6 +112,7 @@ public class MovieRepository : RepositoryBaseQueryable<Movie>, IMovieRepository
             .Include(_ => _.Movie).ThenInclude(_ => _.Directors).ThenInclude(_ => _.Person)
             .Where(fm => fm.UserId == user.Id)
             .Select(fm => fm.Movie)
+            .RemoveOrdering()
             .ToListAsync();
 
 
