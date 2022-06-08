@@ -36,6 +36,16 @@
                         }
                     });
                 }
+                else if (res.status === 401)
+                {
+                    User.signout();
+                    push("/signin");
+                }
+                else
+                {
+                    movie = [];
+                    hasMoreResults = false;
+                }
             })
             .catch((e) => {
                 User.signout();
