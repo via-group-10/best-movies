@@ -46,14 +46,9 @@
                 }
                 else
                 {
-                    movie = [];
                     hasMoreResults = false;
                 }
             })
-            .catch((e) => {
-                User.signout();
-                push("/signin");
-            });
     };
 
     const handleChange = (e) => {
