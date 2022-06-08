@@ -9,7 +9,13 @@
     return getFavoriteMovies().then((res) => {
       if (res.ok) {
         return res.json();
-      } else {
+      }
+      else if (res.status === 401)
+      {
+        User.signout();
+        push("/signin");
+      }
+      else {
         return res.json().then((r) => {
           if (r.type === "https://tools.ietf.org/html/rfc7231#section-6.5.1") {
             throw new Error(r.errors.id[0]);
