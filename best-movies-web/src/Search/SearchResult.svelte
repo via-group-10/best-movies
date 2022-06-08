@@ -21,7 +21,7 @@
         getMovies({
             title: filter,
             offset: offset,
-            limit: 5,
+            limit: 5, 
         })
             .then((res) => {
                 if (res.ok) {
@@ -31,7 +31,10 @@
                                 ? resBody
                                 : [...movies, ...resBody];
                         } else {
-                            movies = [];
+                            if  (!movies) {
+                                // don't reset movies
+                                movies = [];
+                            }
                             hasMoreResults = false;
                         }
                     });

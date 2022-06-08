@@ -22,7 +22,7 @@
 
 <section class="welcome-section">
 		<h1 in:swoopLeft>Welcome to Best Movies &#x1F37F;</h1>
-		<h2 in:swoopRight>What are we watching today?</h2>
+		<h2 in:swoopRight>What are you looking for?</h2>
 </section>
 
 <div class="search-container">

@@ -19,7 +19,7 @@ jobs:
       run: docker login -u $DOCKER_USER -p $DOCKER_TOKEN
         
     - name: Docker Compose Build
-      run: docker-compose build
+      run: docker-compose build --no-cache
         
     - name: Docker Compose push to Docker Hub
       run: docker-compose push
